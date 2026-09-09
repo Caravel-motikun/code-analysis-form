@@ -1,0 +1,69 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>共通解析モデル | Multi-View Analysis</title><style>:root{color-scheme:light;--ink:#183332;--accent:#176d60}*{box-sizing:border-box}body{margin:0;color:var(--ink);background:#f5f7f4;font:16px/1.85 system-ui,'Yu Gothic UI',sans-serif}header{background:#183332;color:white;padding:20px max(24px,calc((100% - 1000px)/2))}header a{color:white}main{max-width:1060px;padding:40px 30px;margin:auto}article{background:white;padding:clamp(20px,4vw,56px);border:1px solid #d9e2dc;border-radius:14px}h1{line-height:1.4;font-size:clamp(28px,4vw,40px)}h2{margin-top:2.2em;font-size:24px}h3{font-size:19px}a{color:var(--accent);text-underline-offset:4px}a:focus-visible{outline:3px solid #bf8b2b;outline-offset:4px}pre{overflow:auto;padding:20px;background:#eef3ef;border-radius:8px;line-height:1.65}code{font-family:Consolas,monospace;overflow-wrap:anywhere}pre code{overflow-wrap:normal}table{display:block;overflow-x:auto;border-collapse:collapse;font-size:14px}td,th{padding:12px;min-width:130px;text-align:left;border:1px solid #d9e2dc}th{background:#eef3ef}blockquote{margin-left:0;padding-left:20px;border-left:3px solid #9ebdb0;color:#49615b}footer{margin-top:30px;font-size:13px;color:#526960}@media print{header,footer{display:none}main,article{padding:0;border:0}body{background:white}pre{white-space:pre-wrap}table{display:table;font-size:10px}td,th{min-width:0}}</style></head><body><header><a href="../../../index.html">← Multi-View Analysis</a></header><main><article><h1 id="section">共通解析モデル</h1>
+<h2 id="section-1">パイプライン</h2>
+<p>対象と調査範囲 → Evidence抽出 → Canonical構築 → 確度分類と矛盾確認 → DOCUMENT → QUICK VIEW → 単一HTML → 検証。</p>
+<p>モデルは一つ。表示上の重複は許可するが、主張は同じIDを参照する。
+新しい事実が必要になったら対象調査とCanonicalへ戻る。</p>
+<h2 id="section-2">モジュールの項目</h2>
+<p>source_scope、subject、responsibilities、facts、inferences、proposals、unknowns、
+symbols、relations、flows、states、errors、contracts、resources、tests、evidence。
+V3で導入したview_contractsも保持する。単一Instructions内の最小モデルはこの追加を禁止していない。</p>
+<ul>
+<li>source_scope：対象root/files、版・commit（未取得ならnull）、caller/callee、設定・資源、未確認範囲、repository_wide、runtime_verified。</li>
+<li>FACT：id、claim、evidence ID。コード読解で言えることと実行結果で言えることを分ける。</li>
+<li>INFERENCE：id、claim、derived_fromで根拠FACTを参照。説明モデル・予測であることを明示。</li>
+<li>PROPOSAL：id、claim、必要ならderived_from。現状の契約に混入させない。</li>
+<li>UNKNOWN：id、claim、未確認理由と次に確認するもの。</li>
+<li>Evidence：E0001形式、file/location/symbol/source_fragment/supports。</li>
+<li>relations：from/to/kind/status/evidence、推論なら根拠参照。</li>
+<li>view_contracts：目的、IN、OUT、終了条件。</li>
+</ul>
+<p>空の一覧は「不存在が証明された」の意味ではない。各対象の調査状態をsource_scope等に記録する。</p>
+<h2 id="section-3">セッションへの写像</h2>
+<p>session、source_scope、facts、inferences、proposals、unknowns、decisions、events、
+artifacts、relations、open_loops、handoff、view_contractsを使用し、evidenceを保持する。
+このevidenceの明示フィールドは、元会話S06のEvidence保持要件を機械可読にする再構成。</p>
+<table>
+<thead>
+<tr>
+<th>モジュール</th>
+<th>セッション</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>対象コードと版</td>
+<td>対象ログ、期間、セッションID、欠落区間</td>
+</tr>
+<tr>
+<td>コード位置・シンボル</td>
+<td>timestamp、speaker/tool、message ID/ログ位置</td>
+</tr>
+<tr>
+<td>外部契約・内部実現</td>
+<td>判断と作業・変更Artifact・検証</td>
+</tr>
+<tr>
+<td>変更影響</td>
+<td>判断や変更が次の作業へ与える影響</td>
+</tr>
+<tr>
+<td>未確認領域</td>
+<td>Open loopsとHandoff</td>
+</tr>
+</tbody>
+</table>
+<p>decisionsはid、論点、選択肢、採用/却下/延期、理由、根拠ID、関連artifactを持つ。
+eventsは順序・時刻（不明ならnull）・行動・観測結果・根拠を持つ。
+artifactsはパス・変更内容・状態を持ち、提案、作成、commit、push、検証を分ける。
+handoffはcurrent_state、do_not_rediscover、open_loops、next_actions、definition_of_done。</p>
+<h2 id="section-4">参照整合性</h2>
+<p>Evidence ID、claim ID、symbol/artifact IDはそれぞれ一意。
+FACTのevidence、INFERENCEのderived_from、relationsの端点は存在するレコードへ解決する。
+根拠断片が本当に主張を支持するかも読む。IDがあるだけでは十分でない。
+ログの「テストした」という発言はその発言の根拠であり、ツール結果を取得したことと同一ではない。</p>
+<h2 id="html">HTMLへの安全な投影</h2>
+<p>コード・ログはテキストとしてエスケープする。
+JSONをscript要素に埋める際は、小なり記号をJSONのUnicodeエスケープにする等で、
+入力中の終了タグがHTMLを閉じないようにする。
+JSONを装飾用文字列ではなくパース可能なデータとして保持する。</p>
+</article><footer><a href="../../../docs/architecture/multiview-analysis-model.md">Markdown原文</a> · 設計コンテキスト / Code Analysis Form</footer></main></body></html>

@@ -1,0 +1,54 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>sessionlog_mentalmodel_builder 再生成仕様 | Multi-View Analysis</title><style>:root{color-scheme:light;--ink:#183332;--accent:#176d60}*{box-sizing:border-box}body{margin:0;color:var(--ink);background:#f5f7f4;font:16px/1.85 system-ui,'Yu Gothic UI',sans-serif}header{background:#183332;color:white;padding:20px max(24px,calc((100% - 1000px)/2))}header a{color:white}main{max-width:1060px;padding:40px 30px;margin:auto}article{background:white;padding:clamp(20px,4vw,56px);border:1px solid #d9e2dc;border-radius:14px}h1{line-height:1.4;font-size:clamp(28px,4vw,40px)}h2{margin-top:2.2em;font-size:24px}h3{font-size:19px}a{color:var(--accent);text-underline-offset:4px}a:focus-visible{outline:3px solid #bf8b2b;outline-offset:4px}pre{overflow:auto;padding:20px;background:#eef3ef;border-radius:8px;line-height:1.65}code{font-family:Consolas,monospace;overflow-wrap:anywhere}pre code{overflow-wrap:normal}table{display:block;overflow-x:auto;border-collapse:collapse;font-size:14px}td,th{padding:12px;min-width:130px;text-align:left;border:1px solid #d9e2dc}th{background:#eef3ef}blockquote{margin-left:0;padding-left:20px;border-left:3px solid #9ebdb0;color:#49615b}footer{margin-top:30px;font-size:13px;color:#526960}@media print{header,footer{display:none}main,article{padding:0;border:0}body{background:white}pre{white-space:pre-wrap}table{display:table;font-size:10px}td,th{min-width:0}}</style></head><body><header><a href="../../index.html">← Multi-View Analysis</a></header><main><article><h1 id="sessionlog_mentalmodel_builder">sessionlog_mentalmodel_builder 再生成仕様</h1>
+<p>会話S06から再構成。目的は会話の圧縮ではなく、得た知識・判断・未解決事項を次へ引き継ぐこと。
+完成HTML本体は未取得。</p>
+<h2 id="document">DOCUMENT</h2>
+<ul>
+<li>D1 Session Understanding：目的、開始時の見立て、決定的だった確認、到達したMental Model、確定事項、深掘りしなかった範囲。</li>
+<li>D2 Decision &amp; Work Record：Decision Ledger、試行・実験、変更Artifact、検証結果、却下・延期案。</li>
+<li>D3 Handoff：Current state、Do not rediscover、Open loops、次セッションの最初の行動、Definition of done。</li>
+</ul>
+<h2 id="quick-view">QUICK VIEWの契約</h2>
+<table>
+<thead>
+<tr>
+<th>View</th>
+<th>IN</th>
+<th>OUT・終了条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>V1 Snapshot</td>
+<td>目的・結果・残件の短い説明</td>
+<td>全発言・全試行なし。10秒でセッションの意味を把握</td>
+</tr>
+<tr>
+<td>V2 Mental Model</td>
+<td>初期仮説、転機となるEvidence、変わった理解、現在の説明モデル</td>
+<td>単なる時系列羅列なし。なぜ理解が変わったか分かる</td>
+</tr>
+<tr>
+<td>V3 Decision Index</td>
+<td>採用・却下・延期、理由、根拠、関連Artifact</td>
+<td>未採用案を決定としない。判断を検索できる</td>
+</tr>
+<tr>
+<td>V4 Timeline / Impact</td>
+<td>時系列、転機、因果、変更物、次への影響</td>
+<td>時間順を因果の証明にしない。関係FACTと影響INFERENCEを分ける</td>
+</tr>
+</tbody>
+</table>
+<p>4分類を維持し、DECISIONを独立した記録種別として追加。
+EvidenceはE0001形式でtimestamp、speaker/tool、発言/ログ位置、
+code inspection、patch、test resultなどの原資料断片とsupportsを保持する。
+時刻や実行結果が欠けていればUNKNOWN。成功を作り出さない。</p>
+<p>Canonical Session Modelの項目と共通規則は<a href="../docs/architecture/multiview-analysis-model.html">共通モデル</a>を参照。
+HTMLはモジュール版と同じ7タブ、外部依存なし、Evidence内部リンク、埋め込みJSON、印刷、キーボード操作を備える。</p>
+<h2 id="section">検証</h2>
+<p>判断の採否と実装状態が混ざっていないこと。
+次の行動が未解決事項に対応すること。完了条件が観測可能であること。
+ログ欠落・未取得Artifact・実行未確認を明記すること。
+根拠なしの因果や成果を追加しないこと。
+HTML構造の検査は<a href="pattern-c-v3-spec.html">V3仕様</a>と共通。</p>
+</article><footer><a href="../../templates/sessionlog-spec.md">Markdown原文</a> · 設計コンテキスト / Code Analysis Form</footer></main></body></html>

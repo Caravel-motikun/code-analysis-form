@@ -1,0 +1,81 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pattern C Multi-View V3 再生成仕様 | Multi-View Analysis</title><style>:root{color-scheme:light;--ink:#183332;--accent:#176d60}*{box-sizing:border-box}body{margin:0;color:var(--ink);background:#f5f7f4;font:16px/1.85 system-ui,'Yu Gothic UI',sans-serif}header{background:#183332;color:white;padding:20px max(24px,calc((100% - 1000px)/2))}header a{color:white}main{max-width:1060px;padding:40px 30px;margin:auto}article{background:white;padding:clamp(20px,4vw,56px);border:1px solid #d9e2dc;border-radius:14px}h1{line-height:1.4;font-size:clamp(28px,4vw,40px)}h2{margin-top:2.2em;font-size:24px}h3{font-size:19px}a{color:var(--accent);text-underline-offset:4px}a:focus-visible{outline:3px solid #bf8b2b;outline-offset:4px}pre{overflow:auto;padding:20px;background:#eef3ef;border-radius:8px;line-height:1.65}code{font-family:Consolas,monospace;overflow-wrap:anywhere}pre code{overflow-wrap:normal}table{display:block;overflow-x:auto;border-collapse:collapse;font-size:14px}td,th{padding:12px;min-width:130px;text-align:left;border:1px solid #d9e2dc}th{background:#eef3ef}blockquote{margin-left:0;padding-left:20px;border-left:3px solid #9ebdb0;color:#49615b}footer{margin-top:30px;font-size:13px;color:#526960}@media print{header,footer{display:none}main,article{padding:0;border:0}body{background:white}pre{white-space:pre-wrap}table{display:table;font-size:10px}td,th{min-width:0}}</style></head><body><header><a href="../../index.html">← Multi-View Analysis</a></header><main><article><h1 id="pattern-c-multi-view-v3">Pattern C Multi-View V3 再生成仕様</h1>
+<p>これは会話S01–S05/S07/S08から再構成した意味構造の仕様。完成V3 HTMLの原本ではない。
+詳細な生成規則は<a href="../agents/module-analysis/instructions.html">最終Instructions</a>にある。</p>
+<h2 id="section">7つの表示契約</h2>
+<table>
+<thead>
+<tr>
+<th>種別</th>
+<th>名称</th>
+<th>IN</th>
+<th>OUT・終了条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D1</td>
+<td>Understanding</td>
+<td>読者の到達目標、具体例、用語、入口、因果、状態変化、正常/失敗、利用時の判断</td>
+<td>関数数でセルを分割しない。セル単体で説明・判断できる</td>
+</tr>
+<tr>
+<td>D2</td>
+<td>External Design</td>
+<td>公開入口・型・引数・戻り値・所有権・寿命・エラー・保証・設定・受入条件</td>
+<td>実装都合を公開保証として扱わない</td>
+</tr>
+<tr>
+<td>D3</td>
+<td>Internal Design</td>
+<td>構成・依存・内部データ・処理・確定点・エラー伝播・資源・並行性・性能・試験・変更影響</td>
+<td>不明な内部仕様を補完しない</td>
+</tr>
+<tr>
+<td>V1</td>
+<td>Definition / MDN</td>
+<td>1〜2文の定義、短い補足、Key terms、See also</td>
+<td>詳細処理・全関数・全エラーなし。10〜30秒</td>
+</tr>
+<tr>
+<td>V2</td>
+<td>Concept / K8s</td>
+<td>What、Why、Mental Model、抽象概念、責務、関係、動作、状態、用途、失敗、境界</td>
+<td>全シンボル・行単位追跡・完全API一覧なし。概念を把握</td>
+</tr>
+<tr>
+<td>V3</td>
+<td>Symbol Reference / Rustdoc</td>
+<td>宣言・引数・戻り値・前提・副作用・所有権・寿命・定義位置・Evidence</td>
+<td>長い設計思想なし。契約を引ける</td>
+</tr>
+<tr>
+<td>V4</td>
+<td>Relation / Impact</td>
+<td>caller/callee、参照、read/write、型・資源・import、変更時に確認すべき範囲</td>
+<td>未調査の全体網羅を断定しない</td>
+</tr>
+</tbody>
+</table>
+<p>DOCUMENT 3タブとQUICK VIEW 4タブの2段ナビゲーション。
+各Quick View冒頭にIN/OUTを表示する。MDN等は文書様式の呼称であり、外部サイトの実装への依存ではない。
+ConceptのWhat/Failureも根拠があって初めてFACT。Why/Mental Modelは根拠が直接なければINFERENCE。</p>
+<h2 id="ui">共通UI</h2>
+<p>自己完結HTML、埋め込みCSS/JS、外部読込なし。
+文字付き4分類LegendとBadge、Evidenceリンクと末尾の折りたたみ根拠一覧。
+Conceptは概要を先に、詳細をdetailsへ。
+canonical-analysisというIDのapplication/jsonにモデルを埋め込む。
+明るい背景、高可読性、表の横スクロール、モバイル対応、キーボード操作、aria対応。
+印刷時は全7表示と必要な根拠を読めるようにし、操作UIを非表示にする。
+作成者モードは任意。未記入例やガイドを通常の解析結果と混ぜない。</p>
+<h2 id="section-1">受入検査</h2>
+<ul>
+<li>source_scopeが明示され、FACTの根拠、推論の導出元、未確認範囲が追える。</li>
+<li>同じ契約・状態・失敗保証が7表示で矛盾しない。</li>
+<li>ID重複、内部リンク切れ、tab/tabpanel対応漏れがない。</li>
+<li>JSONをパースでき、JavaScript構文が正常。外部読込がない。</li>
+<li>クリックとキーボードで切替可能。別タブや閉じたEvidenceへのリンク先を表示できる。</li>
+<li>狭い画面と印刷で内容が欠けない。</li>
+<li>試験案と実施結果を区別し、未実行項目を「検証済み」にしない。</li>
+</ul>
+<p>出力：対象名_analysis.html。架空stats例の主張は実際の対象へ流用しない。</p>
+</article><footer><a href="../../templates/pattern-c-v3-spec.md">Markdown原文</a> · 設計コンテキスト / Code Analysis Form</footer></main></body></html>

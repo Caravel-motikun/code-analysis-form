@@ -1,0 +1,2961 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>設計議論の出典 | Multi-View Analysis</title><style>:root{color-scheme:light;--ink:#183332;--accent:#176d60}*{box-sizing:border-box}body{margin:0;color:var(--ink);background:#f5f7f4;font:16px/1.85 system-ui,'Yu Gothic UI',sans-serif}header{background:#183332;color:white;padding:20px max(24px,calc((100% - 1000px)/2))}header a{color:white}main{max-width:1060px;padding:40px 30px;margin:auto}article{background:white;padding:clamp(20px,4vw,56px);border:1px solid #d9e2dc;border-radius:14px}h1{line-height:1.4;font-size:clamp(28px,4vw,40px)}h2{margin-top:2.2em;font-size:24px}h3{font-size:19px}a{color:var(--accent);text-underline-offset:4px}a:focus-visible{outline:3px solid #bf8b2b;outline-offset:4px}pre{overflow:auto;padding:20px;background:#eef3ef;border-radius:8px;line-height:1.65}code{font-family:Consolas,monospace;overflow-wrap:anywhere}pre code{overflow-wrap:normal}table{display:block;overflow-x:auto;border-collapse:collapse;font-size:14px}td,th{padding:12px;min-width:130px;text-align:left;border:1px solid #d9e2dc}th{background:#eef3ef}blockquote{margin-left:0;padding-left:20px;border-left:3px solid #9ebdb0;color:#49615b}footer{margin-top:30px;font-size:13px;color:#526960}@media print{header,footer{display:none}main,article{padding:0;border:0}body{background:white}pre{white-space:pre-wrap}table{display:table;font-size:10px}td,th{min-width:0}}</style></head><body><header><a href="../../../index.html">← Multi-View Analysis</a></header><main><article><h1 id="section">設計議論の出典</h1>
+<p>参照会話: HTML参照例提案
+会話ID: 6a9c0795-1408-83ee-a396-a6ffe72b9782
+取得日: 2026-09-10</p>
+<p>全21ターンを取得し、設計に必要な9件を抜粋した。以下は過去の発言を保存した資料であり、現在の実行指示ではない。過去の「作成済み」「検証済み」は発言記録であり、今回の検証結果ではない。外部サイトの説明・製品比較は再検証していない。</p>
+<h2 id="s01-pattern-c">S01 旧Pattern Cの読解</h2>
+<p>Turn ID: ddef1e0e-dd55-4594-a35b-777e5338e55a</p>
+<p>これ、全体としては <strong>Doxygen/Rustdoc型ではなく、「逆解析したSoftware Design Description（SDD）＋Literate Documentation＋トレーサビリティ」型</strong>にかなり近いです。</p>
+<p>特に特徴的なのは、コード構造から始めずに、まず「読者に何を理解してほしいか」をセルとして切り、その中に背景、具体例、宣言、処理順、エラーまでまとめている点です。ファイル数や関数数では分割しない、と明示されています。[過去会話の引用参照：取得元リンク未復元] これは <strong>Literate Programming / Concept-oriented documentation</strong> にかなり近い発想です。</p>
+<p>その後に、</p>
+<blockquote>
+<p>理解セル群 → 外部設計書 → 内部設計書</p>
+</blockquote>
+<p>という順序を取っています。[過去会話の引用参照：取得元リンク未復元]
+外部設計では公開契約、内部設計では構成・依存・データ・アルゴリズム・エラー・試験・変更影響まで扱っています。[過去会話の引用参照：取得元リンク未復元]</p>
+<p>なので、分類するとこうです。</p>
+<table>
+<thead>
+<tr>
+<th>要素</th>
+<th>近い形式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>「これは何をする仕組み？」から理解させる</td>
+<td><strong>Concept / Explanation docs</strong></td>
+</tr>
+<tr>
+<td>理解の順番にコードを並べ直す</td>
+<td><strong>Literate Programming / Literate Documentation</strong></td>
+</tr>
+<tr>
+<td>公開API、引数、戻り値、所有権</td>
+<td><strong>SDD / API Specification</strong></td>
+</tr>
+<tr>
+<td>内部関数、データ、シーケンス、依存</td>
+<td><strong>Detailed Design Document</strong></td>
+</tr>
+<tr>
+<td>E0001などでソースへ戻れる</td>
+<td><strong>Evidence-backed documentation</strong></td>
+</tr>
+<tr>
+<td>C→EXT→INT→E→AC/UT</td>
+<td><strong>Requirements/Design Traceability</strong></td>
+</tr>
+<tr>
+<td>ソースから既存仕様を復元する</td>
+<td><strong>Reverse-engineering documentation</strong></td>
+</tr>
+</tbody>
+</table>
+<p>特に最後が重要で、このHTMLは単なる「設計書テンプレート」よりも、</p>
+<p><strong>Evidence-backed Reverse Engineering Report</strong></p>
+<p>と呼んだ方が実態に近いです。</p>
+<p>なぜなら「分からないものを補完しない」「該当なしと未確認を区別する」「対象範囲と根拠を残す」というルールがかなり強い。[過去会話の引用参照：取得元リンク未復元] さらに、理解セルから外部契約、内部実現、根拠、試験までIDで対応付ける構造になっています。[過去会話の引用参照：取得元リンク未復元]</p>
+<h3 id="section-1">以前挙げた形式と比べると</h3>
+<p>感覚的には、</p>
+<pre><code class="language-text">MDN Glossary
+    │
+    │  「これは何？」だけ
+    ▼
+
+Kubernetes Concepts
+    │
+    │  概念・役割・動き
+    ▼
+
+★ 今回のHTML
+    │
+    │  理解 + 設計 + 根拠 + 試験
+    ▼
+
+SDD / Detailed Design
+</code></pre>
+<p>という位置です。</p>
+<p>つまり、<strong>Rustdoc/Doxygenよりかなり上位概念側</strong>です。</p>
+<p>Doxygenなら、</p>
+<pre><code class="language-text">stats_compute()
+  引数
+  戻り値
+  定義位置
+  呼出関係
+</code></pre>
+<p>を中心にします。</p>
+<p>このHTMLは、</p>
+<pre><code class="language-text">そもそも何をする仕組み？
+        ↓
+具体的にどう使う？
+        ↓
+何がどう流れる？
+        ↓
+どういう契約？
+        ↓
+失敗するとどうなる？
+        ↓
+外から見た仕様は？
+        ↓
+内部ではどう実現している？
+        ↓
+その根拠はコードのどこ？
+        ↓
+どう試験する？
+</code></pre>
+<p>まで行っています。</p>
+<p>だから、<strong>1モジュールの完全解析Agentに与えるone-shot</strong>としてはかなり向いています。</p>
+<p>逆に前に話していた、</p>
+<blockquote>
+<p>「これは何？」</p>
+</blockquote>
+<p>だけを答えるAgentには<strong>重すぎます</strong>。</p>
+<p>このHTMLを与えるとモデルは親切心を暴走させて、構造体、所有権、シーケンス、異常系まで全部掘り始める可能性が高いです。人類が「一言で」と書いた直後に20ページ出てくる、いつもの悲劇です。</p>
+<p>なのでエージェント群としては、</p>
+<pre><code class="language-text">Definition Agent
+ └ MDN Glossary型
+
+Concept Agent
+ └ Kubernetes Concepts型
+
+Module Analysis Agent
+ └ ★ 今回のHTML
+
+Symbol / API Agent
+ └ Rustdoc / Doxygen型
+
+Dependency Agent
+ └ Sourcegraph型
+
+Evidence Agent
+ └ GitHub/GitLab source view型
+</code></pre>
+<p>と置くのがかなり綺麗です。</p>
+<p><strong>今回アップしたHTMLは「Module Analysis Agent」のreference.htmlとして非常に近い。</strong>
+しかも普通のModule Analysisより強くて、名前を付けるなら <strong>「Cognitive Reverse-Engineering Report」あるいは「Evidence-backed Software Design Description」</strong> が一番しっくりきます。</p>
+<p>つまりこれは捨てずに、<strong>各モジュールを深く理解して設計資料まで復元する“本体エージェント”のワンショット</strong>に回して、もっと小さな認知タスクには別の軽量HTMLを用意する、という使い分けが良さそうです。</p>
+<h2 id="s02-document-view">S02 DOCUMENT / VIEWの分離</h2>
+<p>Turn ID: bbd450f4-f0da-4a4e-831b-d1ed7835de19</p>
+<p>できます。しかも今のHTMLは土台としてかなり都合がいいです。すでに <strong>「理解セル群 → 外部設計書 → 内部設計書」</strong> という3ビューをタブで切り替える作りになっているので、ここへ4種類の「別の見方」を追加する設計にできます。[過去会話の引用参照：取得元リンク未復元]</p>
+<p>ただし、単純に7タブへ増やすより、<strong>同じ解析結果を7種類の認知ビューで見る</strong>と定義した方が後々きれいです。</p>
+<h2 id="section-2">全体構成案</h2>
+<p>私はこうします。</p>
+<pre><code class="language-text">MODULE ANALYSIS
+
+[ Understanding ]
+[ External Design ]
+[ Internal Design ]
+
+REFERENCE / VIEW MODES
+[ MDN ]
+[ K8s ]
+[ Rustdoc ]
+[ Sourcegraph ]
+</code></pre>
+<p>つまり既存3タブは「設計資料」、追加4タブは「別の読み方」。</p>
+<p>最終的には、</p>
+<pre><code class="language-text">同じソースコード
+      │
+      ▼
+共通解析モデル
+      │
+      ├─ Understanding
+      ├─ External Design
+      ├─ Internal Design
+      │
+      ├─ MDN View
+      ├─ K8s View
+      ├─ Rustdoc View
+      └─ Sourcegraph View
+</code></pre>
+<p>とします。</p>
+<p>ここが重要です。</p>
+<p><strong>7回別々に解析させるのではなく、一度抽出した事実を7種類の形式へ投影する。</strong></p>
+<p>これなら形式ごとの矛盾が減ります。</p>
+<hr />
+<h1 id="mdn">1. MDNタブ</h1>
+<h3 id="section-3">「これは何？」</h3>
+<p>最も軽いビューです。</p>
+<p>今のHTMLの「何をしてくれる仕組みか」に一番近い部分があります。実際、現在も「整数を渡すと何が得られるか」を具体例と一緒に説明しています。[過去会話の引用参照：取得元リンク未復元]</p>
+<p>MDNタブでは意図的に情報を削ります。</p>
+<pre><code class="language-text">MDN VIEW
+
+stats module
+
+一言で
+────────────
+整数列を検証・集計し、
+件数・最小値・最大値・平均値を生成するモジュール。
+
+What it does
+────────────
+入力値を検証
+↓
+統計値を計算
+↓
+Statsとして返却
+↓
+必要なら表示
+
+Key concepts
+────────────
+Stats
+values
+count
+result
+
+See also
+────────────
+→ K8s View
+→ Public API
+→ Source
+</code></pre>
+<h3 id="section-4">このタブの目的</h3>
+<p>読者が<strong>30秒以内に「何なのか」を理解する</strong>。</p>
+<p>ここでは、</p>
+<ul>
+<li>全関数一覧</li>
+<li>全変数</li>
+<li>内部アルゴリズム</li>
+<li>詳細エラー</li>
+<li>テスト</li>
+</ul>
+<p>などは出しません。</p>
+<h3 id="agent">Agentの終了条件</h3>
+<blockquote>
+<p>そのモジュールを知らない人が、何をするものか説明できたら終了。</p>
+</blockquote>
+<hr />
+<h1 id="k8s-docs">2. K8s Docsタブ</h1>
+<h3 id="section-5">「この仕組みはどういう構成なの？」</h3>
+<p>MDNより一段深くします。</p>
+<p>今の「理解セル」にかなり近いです。</p>
+<p>現在のHTMLも、単純な関数分解ではなく「読者に一緒に理解してほしい内容」を単位にして、説明・具体例・宣言・シーケンス・エラーをまとめる方針です。[過去会話の引用参照：取得元リンク未復元]</p>
+<p>K8s型では、</p>
+<pre><code class="language-text">K8S CONCEPT VIEW
+
+Overview
+─────────
+このモジュールは何を担当するか
+
+Responsibilities
+─────────
+・入力検証
+・統計計算
+・結果生成
+・表示
+
+Components
+─────────
+
+main
+  ↓
+stats_compute
+  ↓
+Stats
+  ↓
+stats_print
+
+How it works
+─────────
+1. 入力準備
+2. 検証
+3. 集計
+4. 結果確定
+5. 表示
+
+Failure behavior
+─────────
+入力不正
+→ 結果未更新
+
+表示障害
+→ 集計結果には影響しない
+
+Boundaries
+─────────
+含むもの
+含まないもの
+</code></pre>
+<p>にします。</p>
+<h3 id="section-6">このタブの目的</h3>
+<p><strong>モジュールを一つのシステムとして理解すること。</strong></p>
+<p>なので、</p>
+<blockquote>
+<p>何がある？</p>
+</blockquote>
+<p>ではなく、</p>
+<blockquote>
+<p>何と何がどう協調して、この機能を作っている？</p>
+</blockquote>
+<p>を見る。</p>
+<hr />
+<h1 id="rustdoc">3. Rustdocタブ</h1>
+<h3 id="api">「正確なAPI/シンボル一覧が欲しい」</h3>
+<p>ここから機械寄りになります。</p>
+<p>既存の外部設計書にはすでにかなり材料があります。</p>
+<p>たとえば、</p>
+<ul>
+<li>公開ヘッダ</li>
+<li>公開入口</li>
+<li>公開関数</li>
+<li>引数</li>
+<li>戻り値</li>
+<li>定数</li>
+<li>型</li>
+<li>所有権</li>
+</ul>
+<p>まで整理されています。[過去会話の引用参照：取得元リンク未復元]</p>
+<p>したがってRustdocタブは<strong>新しく解析するというより、既存情報の再表示</strong>でいけます。</p>
+<pre><code class="language-text">RUSTDOC VIEW
+
+Module stats
+============
+
+Description
+-----------
+
+Modules
+
+Structs
+-------
+Stats
+
+Constants
+---------
+STATS_MAX_SAMPLES
+
+Functions
+---------
+
+stats_compute
+-------------------------
+
+Signature
+
+int stats_compute(
+    const int *values,
+    size_t count,
+    Stats *out
+)
+
+Description
+
+Parameters
+
+values
+count
+out
+
+Returns
+
+0
+-1
+
+Errors
+
+Safety / Preconditions
+
+Ownership
+
+Defined at
+stats.c:...
+
+Evidence
+E0001
+E0002
+</code></pre>
+<h3 id="section-7">このタブの目的</h3>
+<p><strong>シンボルを検索して正確な仕様を調べる。</strong></p>
+<p>人間が、</p>
+<blockquote>
+<p><code>stats_compute()</code>ってどういう関数だったっけ？</p>
+</blockquote>
+<p>となった時に見るページです。</p>
+<hr />
+<h1 id="sourcegraph">4. Sourcegraphタブ</h1>
+<h3 id="section-8">「このコードはどことつながっている？」</h3>
+<p>これは完全に関係性ビューにします。</p>
+<pre><code class="language-text">SOURCEGRAPH VIEW
+
+stats_compute
+══════════════════════════
+
+Defined in
+stats.c:4
+
+Called by
+├── main
+└── xxx
+
+Calls
+├── ...
+└── ...
+
+Reads
+├── values
+└── count
+
+Writes
+└── out
+
+Types used
+├── Stats
+└── size_t
+
+Includes
+├── stats.h
+└── stddef.h
+
+References
+────────────
+main.c:...
+stats_test.c:...
+
+Call path
+────────────
+
+main
+ ↓
+stats_compute
+ ↓
+Stats
+ ↓
+stats_print
+ ↓
+printf
+</code></pre>
+<p>ここは文章を減らします。</p>
+<h3 id="sourcegraph-1">Sourcegraphタブの目的</h3>
+<p><strong>コード間の接続を見る。</strong></p>
+<p>質問としては、</p>
+<blockquote>
+<p>どこから呼ばれる？
+何を呼ぶ？
+何を読む？
+何を書き換える？
+型は何を共有する？</p>
+</blockquote>
+<p>です。</p>
+<hr />
+<h1 id="section-9">重要なのは共通データ層</h1>
+<p>これをやるなら、HTMLだけ7種類に直接生成させない方がいいです。</p>
+<p>間に1個、<strong>解析結果の共通モデル</strong>を置いた方がいい。</p>
+<p>たとえば概念的には、</p>
+<pre><code class="language-text">module-analysis.json
+
+module
+summary
+
+responsibilities[]
+
+concepts[]
+
+files[]
+
+symbols[]
+    functions[]
+    types[]
+    constants[]
+    variables[]
+
+dependencies[]
+callers[]
+callees[]
+
+flows[]
+
+errors[]
+
+evidence[]
+
+external_contracts[]
+
+internal_design[]
+
+tests[]
+</code></pre>
+<p>です。</p>
+<p>そして、</p>
+<pre><code class="language-text">analysis.json
+      │
+      ├─ render_understanding()
+      ├─ render_external()
+      ├─ render_internal()
+      ├─ render_mdn()
+      ├─ render_k8s()
+      ├─ render_rustdoc()
+      └─ render_sourcegraph()
+</code></pre>
+<p>とする。</p>
+<p>これ、かなり重要です。</p>
+<p>そうしないと7エージェントがそれぞれコードを読んで、</p>
+<pre><code class="language-text">MDN Agent
+「この関数は公開APIです」
+
+Rustdoc Agent
+「内部関数です」
+
+Sourcegraph Agent
+「知らん」
+</code></pre>
+<p>みたいな文明崩壊が始まります。</p>
+<hr />
+<h1 id="html">今のHTMLとの対応</h1>
+<p>既存資産はかなり再利用できます。</p>
+<table>
+<thead>
+<tr>
+<th>現在の情報</th>
+<th style="text-align: right;">MDN</th>
+<th style="text-align: right;">K8s</th>
+<th style="text-align: right;">Rustdoc</th>
+<th style="text-align: right;">Sourcegraph</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>一言説明</td>
+<td style="text-align: right;">◎</td>
+<td style="text-align: right;">◎</td>
+<td style="text-align: right;">○</td>
+<td style="text-align: right;">△</td>
+</tr>
+<tr>
+<td>具体例</td>
+<td style="text-align: right;">◎</td>
+<td style="text-align: right;">◎</td>
+<td style="text-align: right;">○</td>
+<td style="text-align: right;">×</td>
+</tr>
+<tr>
+<td>用語説明</td>
+<td style="text-align: right;">◎</td>
+<td style="text-align: right;">◎</td>
+<td style="text-align: right;">○</td>
+<td style="text-align: right;">△</td>
+</tr>
+<tr>
+<td>責務</td>
+<td style="text-align: right;">○</td>
+<td style="text-align: right;">◎</td>
+<td style="text-align: right;">○</td>
+<td style="text-align: right;">○</td>
+</tr>
+<tr>
+<td>関数宣言</td>
+<td style="text-align: right;">△</td>
+<td style="text-align: right;">○</td>
+<td style="text-align: right;">◎</td>
+<td style="text-align: right;">◎</td>
+</tr>
+<tr>
+<td>引数/戻り値</td>
+<td style="text-align: right;">×</td>
+<td style="text-align: right;">○</td>
+<td style="text-align: right;">◎</td>
+<td style="text-align: right;">○</td>
+</tr>
+<tr>
+<td>シーケンス</td>
+<td style="text-align: right;">△</td>
+<td style="text-align: right;">◎</td>
+<td style="text-align: right;">△</td>
+<td style="text-align: right;">◎</td>
+</tr>
+<tr>
+<td>エラー</td>
+<td style="text-align: right;">○</td>
+<td style="text-align: right;">◎</td>
+<td style="text-align: right;">◎</td>
+<td style="text-align: right;">○</td>
+</tr>
+<tr>
+<td>caller/callee</td>
+<td style="text-align: right;">×</td>
+<td style="text-align: right;">○</td>
+<td style="text-align: right;">○</td>
+<td style="text-align: right;">◎</td>
+</tr>
+<tr>
+<td>データ所有権</td>
+<td style="text-align: right;">×</td>
+<td style="text-align: right;">○</td>
+<td style="text-align: right;">◎</td>
+<td style="text-align: right;">○</td>
+</tr>
+<tr>
+<td>Evidence</td>
+<td style="text-align: right;">○</td>
+<td style="text-align: right;">◎</td>
+<td style="text-align: right;">◎</td>
+<td style="text-align: right;">◎</td>
+</tr>
+</tbody>
+</table>
+<p>今のHTML自身がすでに、理解セルには「背景・目的、具体例、用語、宣言と契約、因果・時系列、結果変化、エラー判断」を含めるよう定義しています。[過去会話の引用参照：取得元リンク未復元]</p>
+<p>そのため<strong>K8s Viewはほぼ既存Understandingの派生</strong>になります。</p>
+<p>一方、内部設計には内部構成、関数、変数、構造体、シーケンス、データフロー、エラー、並行性、性能、試験、変更影響まであります。[過去会話の引用参照：取得元リンク未復元]</p>
+<p>なのでRustdoc/Sourcegraphを作る材料もすでにかなり揃っています。</p>
+<hr />
+<h1 id="ui7">UIは7個横並びにしない</h1>
+<p>ここは地味に重要です。</p>
+<p>現在3タブですが、7タブを横一列にすると、</p>
+<pre><code class="language-text">理解 | 外部 | 内部 | MDN | K8s | Rustdoc | Sourcegraph
+</code></pre>
+<p>となって、だんだん航空機のコックピットみたいになります。</p>
+<p>なので二階層にします。</p>
+<pre><code class="language-text">DOCUMENT
+[ Understanding ] [ External ] [ Internal ]
+
+VIEW
+[ MDN ] [ K8s ] [ Rustdoc ] [ Sourcegraph ]
+</code></pre>
+<p>あるいは、</p>
+<pre><code class="language-text">[ Understanding ▼ ]
+
+Understanding
+External Design
+Internal Design
+
+Quick Views
+MDN
+K8s
+Rustdoc
+Sourcegraph
+</code></pre>
+<p>でもいい。</p>
+<p>ただ、ワンショットとしてLLMに与えることも考えると、<strong>二段タブの方がDOM構造が単純</strong>です。</p>
+<hr />
+<h1 id="section-10">各エージェントも対応させる</h1>
+<p>最終的にはHTMLとAgentを1:1にしてよいと思います。</p>
+<pre><code class="language-text">agents/
+
+00_extract/
+    instructions.md
+
+01_mdn/
+    reference.html
+    instructions.md
+
+02_k8s/
+    reference.html
+    instructions.md
+
+03_rustdoc/
+    reference.html
+    instructions.md
+
+04_sourcegraph/
+    reference.html
+    instructions.md
+
+05_cognitive/
+    reference.html
+    instructions.md
+
+06_external_design/
+    reference.html
+
+07_internal_design/
+    reference.html
+</code></pre>
+<p>さらに、</p>
+<pre><code class="language-text">00_extract
+</code></pre>
+<p>だけは特殊です。</p>
+<p>こいつは文章を書かず、</p>
+<blockquote>
+<p>ソースから事実を抽出するだけ。</p>
+</blockquote>
+<p>その結果を他のAgentに食わせる。</p>
+<p>これが一番安定します。</p>
+<hr />
+<h1 id="section-11">実装順</h1>
+<p>一気に全部やらない方がいいです。次の順番がいいです。</p>
+<h3 id="phase-1">Phase 1</h3>
+<p>今のHTMLを壊さず、</p>
+<pre><code class="language-text">MDN
+K8s
+Rustdoc
+Sourcegraph
+</code></pre>
+<p>の空タブだけ追加。</p>
+<h3 id="phase-2">Phase 2</h3>
+<p>既存の架空 <code>stats</code> モジュールを使って、4ビューを手作業で完成させる。</p>
+<p>つまりまず<strong>理想的なone-shotを作る</strong>。</p>
+<h3 id="phase-3">Phase 3</h3>
+<p>共通解析データを定義。</p>
+<pre><code class="language-text">module
+symbols
+relations
+flows
+evidence
+...
+</code></pre>
+<p>を固定する。</p>
+<h3 id="phase-4">Phase 4</h3>
+<p>4種類のAgentにそれぞれ同じ解析データを渡し、</p>
+<pre><code class="language-text">MDN形式
+K8s形式
+Rustdoc形式
+Sourcegraph形式
+</code></pre>
+<p>へ変換させる。</p>
+<h3 id="phase-5">Phase 5</h3>
+<p>最後に既存の</p>
+<pre><code class="language-text">Understanding
+External
+Internal
+</code></pre>
+<p>も同じ共通モデルから作る。</p>
+<p>すると最終的に、</p>
+<pre><code class="language-text">          Source Code
+               │
+          Extract Agent
+               │
+        Canonical Model
+               │
+ ┌─────────────┼──────────────┐
+ ↓             ↓              ↓
+Learning      Design         Code
+ ↓             ↓              ↓
+MDN           External       Rustdoc
+K8s           Internal       Sourcegraph
+Understanding
+</code></pre>
+<p>になります。</p>
+<p>これなら、あなたが今考えている**「エージェントを垂直に分割して、それぞれに専用one-shot HTMLを持たせる」**という設計と綺麗につながります。</p>
+<p>特に私は、<strong>MDN/K8s/Rustdoc/Sourcegraphを今の3タブと同格の「資料」ではなく、同一事実を異なる認知目的で投影するViewとして設計する</strong>のを推します。ここを分けておくと、後から「State Machine View」「Data Flow View」「Review View」などを追加しても構造が崩れません。</p>
+<h2 id="s03-mdnconcept">S03 MDN軽量化とConcept深化</h2>
+<p>Turn ID: e2e4f2c6-7667-49a8-9c31-97b88f368699</p>
+<p>少し修正した方がいいです。公式の実物と見比べると、<strong>MDNは今よりむしろ軽く、K8sは今よりかなり厚く</strong>するのが正しいです。</p>
+<h3 id="mdn-1">MDNは「こんなもん」どころか、今のテンプレは少し盛りすぎ</h3>
+<p>MDNのGlossaryは本当に短いです。公式テンプレートでも、</p>
+<ul>
+<li>最初に簡潔な定義</li>
+<li>必要なら補足を最大2つ程度の短い段落</li>
+<li>詳細は別記事</li>
+<li>See also</li>
+</ul>
+<p>という設計です。画面1枚を超えるくらいならConceptual pageへ移せ、という基準まであります。[過去会話の引用参照：取得元リンク未復元]</p>
+<p>なので今作ったMDN Viewの、</p>
+<blockquote>
+<p>一言定義
+何をしてくれるか
+主要な言葉4個
+対象外</p>
+</blockquote>
+<p>は悪くないですが、<strong>純粋なMDN Glossary型なら「何をしてくれるか」のフローすら必須ではありません</strong>。</p>
+<p>私はこう縮めます。</p>
+<pre><code class="language-text">MDN VIEW
+
+stats module
+
+statsは、整数配列を検証して
+件数・最小値・最大値・平均値を計算する
+集計モジュールです。
+
+見本プログラムでは、計算結果をStatsとして返し、
+必要に応じて標準出力へ表示します。
+
+Key terms
+- Stats
+- stats_compute
+- stats_print
+
+See also
+→ Concept
+→ API Reference
+→ Source
+</code></pre>
+<p>これで十分。</p>
+<p>つまりMDN Agentの責務は本当に、</p>
+<blockquote>
+<p><strong>「これは何？」に答える</strong></p>
+</blockquote>
+<p>だけです。</p>
+<hr />
+<h2 id="k8s">一方K8sは、今のものでは薄い</h2>
+<p>ここは私の前回設計が軽くしすぎました。</p>
+<p>Kubernetes公式のConceptsは、単なるOverviewではなく、</p>
+<blockquote>
+<p>システムの各部分と抽象概念を理解し、Kubernetesがどう動くかをより深く理解する</p>
+</blockquote>
+<p>ためのセクションです。[過去会話の引用参照：取得元リンク未復元]</p>
+<p>たとえばPodのConceptページだけでも、</p>
+<ul>
+<li>Podとは何か</li>
+<li>何をモデル化しているのか</li>
+<li>どう使われるのか</li>
+<li>単一コンテナ / 複数コンテナ</li>
+<li>リソース共有</li>
+<li>ストレージ</li>
+<li>ネットワーク</li>
+<li>他の抽象化との関係</li>
+</ul>
+<p>まで説明しています。[過去会話の引用参照：取得元リンク未復元]</p>
+<p>Deploymentならさらに、</p>
+<ul>
+<li>何を管理する抽象化なのか</li>
+<li>desired stateとactual state</li>
+<li>典型的なUse Case</li>
+<li>更新</li>
+<li>rollback</li>
+<li>scaling</li>
+<li>lifecycle/status</li>
+<li>failure</li>
+</ul>
+<p>まで入ります。[過去会話の引用参照：取得元リンク未復元]</p>
+<p>つまりK8s型の本質は、</p>
+<p><strong>「構成要素を説明する」より「頭の中に概念モデルを作る」</strong></p>
+<p>ことです。</p>
+<hr />
+<h1 id="k8s-view">なのでK8s Viewはこのくらい欲しい</h1>
+<p>今の</p>
+<pre><code class="language-text">Overview
+Responsibilities
+How it works
+Failure behavior
+Boundaries
+</code></pre>
+<p>から、</p>
+<pre><code class="language-text">K8s CONCEPT VIEW
+
+1. What this concept is
+   この仕組みは何なのか
+
+2. Why it exists
+   何の問題を解決するために存在するか
+
+3. Mental model
+   何として捉えると理解しやすいか
+
+4. Key concepts / abstractions
+   この仕組みを理解するための主要概念
+
+5. Components and responsibilities
+   誰が何を担当するか
+
+6. Relationships
+   それぞれがどう関係するか
+
+7. How it works
+   正常系の大まかな流れ
+
+8. State / lifecycle
+   何がどの状態からどの状態へ変化するか
+
+9. Typical use cases
+   どんな場面でどう使うか
+
+10. Failure and recovery
+    失敗時に何が起こり、どこまで回復するか
+
+11. Boundaries / non-goals
+    何をしない仕組みなのか
+
+12. Related concepts
+    次に何を理解すべきか
+</code></pre>
+<p>くらいがいいです。</p>
+<p>全部を必ず埋める必要はありません。**対象コードに存在しない概念は「該当なし」、解析できていないなら「未確認」**です。</p>
+<hr />
+<h2 id="statsmental-model">statsなら、例えば「Mental model」を入れる</h2>
+<p>これは結構大事です。</p>
+<pre><code class="language-text">Mental model
+
+このモジュールは、
+
+入力
+ ↓
+検証
+ ↓
+一時的な計算
+ ↓
+結果確定
+ ↓
+利用
+
+というトランザクションに近いモデルで理解できる。
+
+検証・計算途中ではoutを変更せず、
+全件処理に成功した時点で結果を確定する。
+
+そのため、
+
+計算途中の状態
+≠
+利用可能な結果
+
+である。
+</code></pre>
+<p>これ、Rustdocではまず出てきません。</p>
+<p>Rustdocは、</p>
+<blockquote>
+<p><code>stats_compute()</code>の契約は？</p>
+</blockquote>
+<p>に答える。</p>
+<p>K8s Concept型は、</p>
+<blockquote>
+<p><strong>「このコード全体を頭の中でどうモデル化すればいい？」</strong></p>
+</blockquote>
+<p>に答える。</p>
+<p>この違いです。</p>
+<hr />
+<h2 id="why-it-exists">さらに「Why it exists」が重要</h2>
+<p>現在のテンプレでは責務から始まっていますが、K8s型ならその前に、</p>
+<pre><code class="language-text">Why it exists
+
+呼出し側が、
+
+・入力値の妥当性確認
+・最小/最大/平均の算出
+・結果をいつ有効とみなすか
+
+を個別に管理しなくてもよいように、
+一連の処理をstatsモジュールとしてまとめている。
+</code></pre>
+<p>を入れたい。</p>
+<p>KubernetesのOverviewも「What」だけではなく、かなり明確に「Why you need Kubernetes and what it can do」を置いています。[過去会話の引用参照：取得元リンク未復元]</p>
+<hr />
+<h1 id="section-12">4形式の深さを並べると分かりやすい</h1>
+<p>私は最終的にこの粒度にします。</p>
+<table>
+<thead>
+<tr>
+<th>View</th>
+<th>答える質問</th>
+<th style="text-align: right;">深さ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MDN</strong></td>
+<td>これは何？</td>
+<td style="text-align: right;">★</td>
+</tr>
+<tr>
+<td><strong>K8s Concepts</strong></td>
+<td>どういう考え方・仕組み？</td>
+<td style="text-align: right;">★★★</td>
+</tr>
+<tr>
+<td><strong>Rustdoc</strong></td>
+<td>正確なAPI・型・契約は？</td>
+<td style="text-align: right;">★★★</td>
+</tr>
+<tr>
+<td><strong>Sourcegraph</strong></td>
+<td>コード上でどことどう繋がる？</td>
+<td style="text-align: right;">★★★</td>
+</tr>
+<tr>
+<td>Understanding</td>
+<td>実際の動作を理解したい</td>
+<td style="text-align: right;">★★★★</td>
+</tr>
+<tr>
+<td>External Design</td>
+<td>外から見た仕様は？</td>
+<td style="text-align: right;">★★★★★</td>
+</tr>
+<tr>
+<td>Internal Design</td>
+<td>中ではどう実現している？</td>
+<td style="text-align: right;">★★★★★</td>
+</tr>
+</tbody>
+</table>
+<p>ここで重要なのが、<strong>K8sとUnderstandingは似ているけれど同じではない</strong>ことです。</p>
+<p>K8sは、</p>
+<blockquote>
+<p>概念モデルを作る。</p>
+</blockquote>
+<p>Understandingは、</p>
+<blockquote>
+<p>実際のコードを理解する。</p>
+</blockquote>
+<p>です。</p>
+<hr />
+<h3 id="html-1">今回のHTMLならこう直すのが良い</h3>
+<pre><code class="language-text">MDN
+    ↓
+一言定義
+短い補足
+Key terms
+See also
+
+K8s
+    ↓
+What
+Why
+Mental model
+Key abstractions
+Components
+Relationships
+How it works
+State / lifecycle
+Use cases
+Failure / recovery
+Boundaries
+Related concepts
+
+Rustdoc
+    ↓
+Symbols
+Signatures
+Parameters
+Returns
+Errors
+Ownership
+Evidence
+
+Sourcegraph
+    ↓
+Definitions
+Callers
+Callees
+References
+Reads/Writes
+Dependencies
+</code></pre>
+<p>この形なら4つがかなり綺麗に<strong>直交</strong>します。</p>
+<p>なので、評価すると <strong>MDNは現在80〜90点で少し削る、K8sは現在50〜60点でかなり増やす</strong>くらいです。特にK8sへ <strong>Why / Mental model / Abstractions / Use cases / State-Lifecycle</strong> を追加すると、「単なる概要ページ」から本当のConcept Viewに変わります。</p>
+<h2 id="s04-v3">S04 V3への変更理由</h2>
+<p>Turn ID: cc51c56e-4a15-428e-a941-9ced8b614a6f</p>
+<p>はい。今のV2はかなり良くなっています。ここからさらに変えるなら、<strong>項目を増やすより「各ビューの境界」と「解析結果の信頼性」をUIそのものに埋め込む</strong>方向が効きます。</p>
+<p>特に私なら次の5点を変えます。</p>
+<h3 id="k8s-1">1. K8sを「概要＋詳細折りたたみ」にする</h3>
+<p>今のK8sは内容としては良いのですが、12節あるので、また少し <strong>Understandingの別バージョン</strong>に近づいています。</p>
+<p>なので最初に、</p>
+<pre><code class="language-text">K8s Concept
+
+What
+Why
+Mental model
+Components
+Lifecycle
+</code></pre>
+<p>だけを見せて、</p>
+<pre><code class="language-text">▶ How it works
+▶ Use cases
+▶ Failure and recovery
+▶ Boundaries
+▶ Related concepts
+</code></pre>
+<p>を <code>&lt;details&gt;</code> で展開する。</p>
+<p>つまり、</p>
+<pre><code class="language-text">最初の30秒
+    ↓
+概念モデルを掴む
+
+必要なら
+    ↓
+詳細を開く
+</code></pre>
+<p>です。</p>
+<p>これで</p>
+<ul>
+<li>MDN = 10秒</li>
+<li>K8s = 1〜3分</li>
+<li>Understanding = 10分以上</li>
+</ul>
+<p>という時間軸まで綺麗に分離できます。</p>
+<hr />
+<h3 id="fact-inference-unknown">2. 全ビューに「FACT / INFERENCE / UNKNOWN」を付ける</h3>
+<p>これはかなり重要です。</p>
+<p>今もEvidenceは非常に強いですが、</p>
+<pre><code class="language-text">このコードから直接確認できる事実
+</code></pre>
+<p>と、</p>
+<pre><code class="language-text">複数の事実を組み合わせて説明した解釈
+</code></pre>
+<p>が文章上では同じ見た目になっています。</p>
+<p>例えばK8sの、</p>
+<blockquote>
+<p>「小さなトランザクションとして捉える」</p>
+</blockquote>
+<p>は非常に有用ですが、これはコードに <code>transaction</code> と書いてあるわけではありません。</p>
+<p>なので、</p>
+<pre><code class="language-text">[FACT]
+全件検証後に *out を更新する。
+
+[INTERPRETATION]
+「検証 → 一時計算 → 確定」という
+小さなトランザクションとして理解できる。
+
+[UNKNOWN]
+意図的にtransactional semanticsとして
+設計されたかどうかは確認できない。
+</code></pre>
+<p>とします。</p>
+<p>分類は4個くらいで十分です。</p>
+<table>
+<thead>
+<tr>
+<th>種別</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>FACT</strong></td>
+<td>コードから直接確認</td>
+</tr>
+<tr>
+<td><strong>INFERENCE</strong></td>
+<td>コードから合理的に推論</td>
+</tr>
+<tr>
+<td><strong>PROPOSAL</strong></td>
+<td>設計改善案</td>
+</tr>
+<tr>
+<td><strong>UNKNOWN</strong></td>
+<td>調査範囲では判断不能</td>
+</tr>
+</tbody>
+</table>
+<p>これが入ると、このHTMLが単なる説明資料から<strong>解析成果物</strong>になります。</p>
+<hr />
+<h3 id="sourcegraph-view">3. Sourcegraph Viewを「表」から「影響解析ビュー」に進化させる</h3>
+<p>今は、</p>
+<pre><code class="language-text">Defined
+Called by
+Calls
+Reads/Writes
+</code></pre>
+<p>なので良いです。</p>
+<p>さらに一段進めるなら、</p>
+<pre><code class="language-text">stats_compute
+
+Incoming
+main
+   ↓
+stats_compute
+
+Outgoing
+stats_compute
+   ├─ Stats
+   └─ STATS_MAX_SAMPLES
+
+Reads
+values[]
+count
+
+Writes
+*out
+
+Change impact
+この関数を変更すると影響し得るもの
+   ├─ main
+   ├─ Stats contract
+   └─ tests...
+</code></pre>
+<p>まで入れる。</p>
+<p>特にあなたの目的が<strong>既存コードを理解して変更すること</strong>なので、</p>
+<blockquote>
+<p>「これは何とつながっている？」</p>
+</blockquote>
+<p>の次に必要なのは、</p>
+<blockquote>
+<p><strong>「これを変えたら何が壊れる可能性がある？」</strong></p>
+</blockquote>
+<p>です。</p>
+<p>Sourcegraph Viewを</p>
+<p><strong>Relation / Impact View</strong></p>
+<p>まで育てる価値があります。</p>
+<hr />
+<h3 id="section-13">4. 各ビューに「このビューでは答えないこと」を明示する</h3>
+<p>今も終了条件があります。これはかなり良いです。</p>
+<p>さらにone-shotとして強くするなら、冒頭にも置きます。</p>
+<p>例えばMDN。</p>
+<pre><code class="language-text">Purpose
+これは何かを短く定義する。
+
+IN
+- 一言定義
+- 最小限の補足
+- Key terms
+
+OUT
+- 詳細処理
+- エラー一覧
+- API契約
+- アルゴリズム
+</code></pre>
+<p>K8sなら、</p>
+<pre><code class="language-text">IN
+- Why
+- Mental model
+- Concepts
+- Relationships
+- Lifecycle
+
+OUT
+- 全シンボル一覧
+- 行単位のコード追跡
+- 詳細な引数仕様
+</code></pre>
+<p>Rustdocなら逆に、</p>
+<pre><code class="language-text">IN
+- Symbol
+- Signature
+- Parameters
+- Returns
+- Errors
+- Ownership
+
+OUT
+- 設計思想
+- 長い処理説明
+</code></pre>
+<p>にする。</p>
+<p>これは人間向けでもありますが、何より<strong>OpenCodeのAgentにone-shotとして渡したときに効きます</strong>。</p>
+<p>HTMLそのものがAgentの責任境界になります。</p>
+<hr />
+<h3 id="canonical-analysishtml">5. Canonical AnalysisをHTML内部に機械可読データとして持つ</h3>
+<p>ここが一番大きな発展形です。</p>
+<p>今は概念として、</p>
+<pre><code class="language-text">CANONICAL FACTS
+
+module
+responsibilities
+symbols
+relations
+flows
+errors
+evidence
+contracts
+tests
+</code></pre>
+<p>を置いています。</p>
+<p>これを本当にHTML内へ、</p>
+<pre><code class="language-html">&lt;script type=&quot;application/json&quot; id=&quot;canonical-analysis&quot;&gt;
+{
+  &quot;module&quot;: {...},
+  &quot;symbols&quot;: [...],
+  &quot;relations&quot;: [...],
+  &quot;flows&quot;: [...],
+  &quot;errors&quot;: [...],
+  &quot;evidence&quot;: [...]
+}
+&lt;/script&gt;
+</code></pre>
+<p>として埋め込む。</p>
+<p>するとHTMLが、</p>
+<pre><code class="language-text">人間向け表示
++
+LLM向けone-shot
++
+機械可読解析データ
+</code></pre>
+<p>の3役になります。</p>
+<p>これがかなり強い。</p>
+<p>最終的には、</p>
+<pre><code class="language-text">Source Code
+     ↓
+Extract Agent
+     ↓
+canonical-analysis.json
+     ↓
+┌─────────────────────────┐
+│                         │
+MDN   K8s   Rustdoc   Sourcegraph
+│                         │
+Understanding / Design
+</code></pre>
+<p>という設計になるので、<strong>ビューを作るAgentが勝手に事実を追加する必要がなくなる</strong>わけです。</p>
+<hr />
+<h2 id="section-14">そうすると最終形はこうなります</h2>
+<pre><code class="language-text">MODULE ANALYSIS
+──────────────────────────
+
+Status
+✓ Source scope known
+✓ Static analysis
+? Runtime unverified
+
+DOCUMENT
+[Understanding] [External] [Internal]
+
+QUICK VIEW
+[MDN] [K8s] [Rustdoc] [Relation/Impact]
+
+
+MDN
+10 sec
+「これは何？」
+
+K8s
+1–3 min
+「どう理解すればいい？」
+
+Rustdoc
+Lookup
+「このシンボルの契約は？」
+
+Relation / Impact
+Investigation
+「どこと繋がり、変えるとどこへ影響する？」
+
+Understanding
+Deep read
+「実際どう動く？」
+
+External
+Specification
+「外から何を保証する？」
+
+Internal
+Implementation
+「中でどう実現している？」
+</code></pre>
+<p>さらに全ページ共通で、</p>
+<pre><code class="language-text">FACT       緑的な意味
+INFERENCE  解釈
+PROPOSAL   設計案
+UNKNOWN    未確認
+</code></pre>
+<p>という<strong>Evidence status</strong>を持たせる。</p>
+<p>これでかなり完成形に近づきます。</p>
+<h3 id="section-15">優先順位を付けるなら</h3>
+<p><strong>① FACT / INFERENCE / UNKNOWN</strong>
+<strong>② K8sのProgressive Disclosure</strong>
+<strong>③ Sourcegraph → Relation/Impact化</strong>
+<strong>④ 各ViewのIN/OUT境界</strong>
+<strong>⑤ Canonical JSON埋め込み</strong></p>
+<p>の順がいいです。</p>
+<p>特に①と④は、OpenCodeにHTMLをone-shotとして食わせる用途では効きます。<strong>「何を書くか」だけでなく「何を書いてはいけないか」と「どこまで事実なのか」がテンプレ自体から学習できる</strong>からです。</p>
+<p>ここまで来ると、単なる設計書テンプレというより、かなりちゃんとした<strong>リバースエンジニアリング用の知識表現フォーマット</strong>になってきます。</p>
+<h2 id="s05-v3">S05 V3作成時の説明</h2>
+<p>Turn ID: 76461168-5ea5-47de-b1b3-927d737d45bf</p>
+<p>V3を作りました。今回は「情報を増やす」より、<strong>事実・解釈・提案・未確認を混ぜない解析フォーマット</strong>へ寄せています。</p>
+<p>主な変更は、<code>FACT / INFERENCE / PROPOSAL / UNKNOWN</code> の4区分、4つのQuick Viewそれぞれへの <strong>IN / OUT責任境界</strong>、K8sの詳細部分の折りたたみ、Sourcegraph型ビューの <strong>Relation / Impact化</strong>、そしてHTML内部への <strong>Canonical Analysis JSON</strong> 埋め込みです。</p>
+<p>K8sでは特に、</p>
+<ul>
+<li>What = FACT</li>
+<li>Why = INFERENCE</li>
+<li>Mental model = INFERENCE</li>
+<li>State/Lifecycle = 説明上のモデル</li>
+<li>Failure = FACT</li>
+</ul>
+<p>という区別が見えるようになっています。</p>
+<p>Relation / Impactでは、</p>
+<blockquote>
+<p>ここが繋がっている</p>
+</blockquote>
+<p>という事実と、</p>
+<blockquote>
+<p>ここを変えたら、この辺をレビューすべき</p>
+</blockquote>
+<p>という推論を分離しました。これで「影響範囲っぽいものをLLMが勝手に事実扱いする」事故をかなり抑えられます。まあ、LLMに自由を与えると元気よく増築するので、柵は必要です。</p>
+<p>またCanonical JSONには、例として、</p>
+<pre><code class="language-text">facts
+inferences
+proposals
+unknowns
+relations
+view_contracts
+source_scope
+</code></pre>
+<p>を持たせています。将来的にExtract Agentの出力先としてそのまま発展させられる構造です。</p>
+<p>HTMLとしても、7タブ・重複ID・内部リンク・Canonical JSON・JavaScript構文を検証済みです。</p>
+<p>[生成物への参照：本体は未取得]</p>
+<h2 id="s06-sessionlog">S06 sessionlogへの転用</h2>
+<p>Turn ID: aaee14ce-641e-4d3c-baac-23387b53b938</p>
+<p>作りました。今回は <strong>module解析版V3の認知モデルを、OpenCodeセッションログ向けに置き換えた版</strong>です。</p>
+<p>構成はこうしています。</p>
+<ul>
+<li><strong>D1 Session Understanding</strong>
+<ul>
+<li>セッションの目的</li>
+<li>開始時点の見立て</li>
+<li>決定的だった確認</li>
+<li>到達したMental Model</li>
+<li>確定事項</li>
+<li>深掘りしなかった範囲</li>
+</ul>
+</li>
+<li><strong>D2 Decision &amp; Work Record</strong>
+<ul>
+<li>Decision Ledger</li>
+<li>試行・実験</li>
+<li>変更Artifact</li>
+<li>検証結果</li>
+<li>却下・延期案</li>
+</ul>
+</li>
+<li><strong>D3 Handoff</strong>
+<ul>
+<li>Current state</li>
+<li>Do not rediscover</li>
+<li>Open loops</li>
+<li>次セッションの最初の行動</li>
+<li>Definition of done</li>
+</ul>
+</li>
+<li><strong>V1 Snapshot</strong>
+<ul>
+<li>「このセッションは何だった？」を10秒で把握</li>
+</ul>
+</li>
+<li><strong>V2 Mental Model</strong>
+<ul>
+<li>問題をどう捉えるようになったか</li>
+</ul>
+</li>
+<li><strong>V3 Decision Index</strong>
+<ul>
+<li>何を採用・延期・却下したかを根拠付きで検索</li>
+</ul>
+</li>
+<li><strong>V4 Timeline / Impact</strong>
+<ul>
+<li>転機、因果、変更物、次の影響範囲</li>
+</ul>
+</li>
+</ul>
+<p>さらにV3から引き継いで、</p>
+<p><code>FACT / INFERENCE / PROPOSAL / UNKNOWN</code></p>
+<p>を維持しつつ、セッションログ特有の <strong>DECISION</strong> を第一級の要素として追加しました。</p>
+<p>Canonical JSONも、</p>
+<pre><code class="language-text">session
+source_scope
+facts
+inferences
+proposals
+unknowns
+decisions
+events
+artifacts
+relations
+open_loops
+handoff
+view_contracts
+</code></pre>
+<p>というセッションログ専用モデルに変更しています。</p>
+<p>Evidenceも、コード行ではなく、</p>
+<pre><code class="language-text">timestamp
+speaker / tool
+発言
+code inspection
+patch
+test result
+</code></pre>
+<p>を <code>E0001...</code> で保持する形です。</p>
+<p>これなら最終的に、</p>
+<pre><code class="language-text">OpenCode Session Log
+        ↓
+Evidence extraction
+        ↓
+Canonical Session Model
+        ↓
+ ┌───────────────┬──────────────┐
+ Snapshot      Mental Model
+ Decisions     Timeline / Impact
+        ↓
+ Session Understanding
+ Work Record
+ Handoff
+</code></pre>
+<p>という流れにできます。</p>
+<p>つまり、単なる「セッション要約Agent」ではなく、<strong>セッション中に得た知識・判断・未解決事項を次へ継承するAgent</strong>になっています。会話を短く畳むだけなら議事録で済みますからね。わざわざLLMを使ってやるなら、後から再利用できる形まで持っていった方がいいです。</p>
+<p>[生成物への参照：本体は未取得]</p>
+<h2 id="s07-html">S07 参照HTMLなしでの再生成</h2>
+<p>Turn ID: 4da9c381-a48b-403c-92e3-203ae232207f</p>
+<p>そういう条件なら、<strong>V3を見本として与える方式は捨てて、V3の「生成規則そのもの」を仕様化する</strong>のが正解です。</p>
+<p>つまり、</p>
+<pre><code class="language-text">V3 HTML
+   ↓ 模倣
+</code></pre>
+<p>ではなく、</p>
+<pre><code class="language-text">Mental Model
+   +
+Canonical Schema
+   +
+Document/View Contract
+   +
+HTML UI Specification
+   +
+Validation Rules
+          ↓
+        Sol
+          ↓
+V3相当HTMLを毎回ゼロから構築
+</code></pre>
+<p>にします。</p>
+<p>この方が隔離環境にも持っていきやすいです。巨大HTMLを参照資産として配れないなら、モデルに「完成品を真似ろ」ではなく「この設計規約に従って完成品を作れ」と言わせればいいわけです。面倒ですが、むしろ長期運用にはこっちの方がまともです。</p>
+<h2 id="section-16">コンテキストは4つに分ける</h2>
+<pre><code class="language-text">agent/
+├─ AGENTS.md
+├─ canonical_schema.md
+├─ html_contract.md
+└─ TASK.md
+</code></pre>
+<p>くらいがいいです。</p>
+<p>その中心になる <code>AGENTS.md</code> は、こうします。</p>
+<div class="writing" variant="document" id="71428" title="Reference-Free Multi-View Module Analysis Agent"><h1 id="evidence-aware-multi-view-module-analysis-agent">Evidence-Aware Multi-View Module Analysis Agent</h1>
+<p>あなたは既存ソフトウェアを静的解析し、人間が理解・保守・変更判断に利用できる自己完結HTMLドキュメントを構築するエージェントです。</p>
+<p>既存のHTMLテンプレートや完成見本には依存しません。</p>
+<p>この文書に記載された認知モデル、情報モデル、文書構造、ビュー契約、Evidence規則、HTML UI規則から、成果物をゼロから構築してください。</p>
+<hr />
+<h1 id="section-17">1. 最終目的</h1>
+<p>入力されたコードについて、単なる関数一覧やコード要約ではなく、</p>
+<ul>
+<li>これは何か</li>
+<li>なぜ存在するか</li>
+<li>どういう概念として理解できるか</li>
+<li>外部からどう利用するか</li>
+<li>内部でどう実現しているか</li>
+<li>どのコードと関係しているか</li>
+<li>失敗すると何が起きるか</li>
+<li>変更した場合にどこを確認すべきか</li>
+<li>その判断の根拠はどこか</li>
+</ul>
+<p>を、一つの解析モデルから複数の読解ビューとして提示してください。</p>
+<hr />
+<h1 id="section-18">2. 基本アーキテクチャ</h1>
+<p>必ず次の順序で作業してください。</p>
+<p>Source Code</p>
+<p>↓</p>
+<p>Evidence Collection</p>
+<p>↓</p>
+<p>Canonical Analysis</p>
+<p>↓</p>
+<p>Consistency Check</p>
+<p>↓</p>
+<p>DOCUMENT生成</p>
+<p>↓</p>
+<p>VIEW生成</p>
+<p>↓</p>
+<p>HTML生成</p>
+<p>↓</p>
+<p>Validation</p>
+<p>HTMLから逆算して解析してはいけません。</p>
+<p>先に解析事実を確定し、その後にHTMLへ投影してください。</p>
+<hr />
+<h1 id="section-19">3. 調査範囲を最初に固定する</h1>
+<p>解析開始時にSource Scopeを定義してください。</p>
+<p>最低限記録するもの：</p>
+<ul>
+<li>対象ディレクトリ</li>
+<li>対象ファイル</li>
+<li>対象コミット・版（取得可能な場合）</li>
+<li>調査したcaller</li>
+<li>調査したcallee</li>
+<li>調査した設定ファイル</li>
+<li>実行試験の有無</li>
+<li>静的読解だけか</li>
+<li>リポジトリ全体を確認したか</li>
+<li>調査していない範囲</li>
+</ul>
+<p>重要：</p>
+<p>「見つからなかった」と
+「存在しない」は同じ意味ではありません。</p>
+<p>リポジトリ全体を確認していない場合、</p>
+<p>「存在しない」</p>
+<p>と断定してはいけません。</p>
+<p>その場合は、</p>
+<p>「調査範囲では確認されない」</p>
+<p>または</p>
+<p>「未確認」</p>
+<p>としてください。</p>
+<hr />
+<h1 id="evidence">4. Evidence</h1>
+<p>重要な解析結果には必ずEvidenceを付けてください。</p>
+<p>Evidence ID：</p>
+<p>E0001
+E0002
+E0003
+...</p>
+<p>Evidenceは最低限、</p>
+<ul>
+<li>ID</li>
+<li>ファイル</li>
+<li>行範囲</li>
+<li>対象シンボル</li>
+<li>根拠となるコード</li>
+<li>何を確認できるか</li>
+</ul>
+<p>を保持してください。</p>
+<p>例：</p>
+<p>E0007</p>
+<p>File:
+src/storage/cache.c</p>
+<p>Lines:
+120-156</p>
+<p>Symbol:
+cache_write</p>
+<p>Supports:</p>
+<ul>
+<li>書込み前にdirty flagを設定する</li>
+<li>flush失敗時にdirty flagを保持する</li>
+</ul>
+<p>重要な主張からEvidenceまで内部リンクできるようにしてください。</p>
+<hr />
+<h1 id="knowledge-status">5. Knowledge Status</h1>
+<p>重要な知識は必ず次の4種類のいずれかへ分類してください。</p>
+<h2 id="fact">FACT</h2>
+<p>直接確認された事実。</p>
+<p>根拠：</p>
+<ul>
+<li>ソースコード</li>
+<li>設定</li>
+<li>ヘッダ</li>
+<li>テスト結果</li>
+<li>実行ログ</li>
+<li>提示された仕様</li>
+</ul>
+<p>FACTにはEvidence IDを付与してください。</p>
+<hr />
+<h2 id="inference">INFERENCE</h2>
+<p>複数のFACTから導いた解釈。</p>
+<p>例：</p>
+<p>FACT：
+結果領域は全入力検証後にのみ更新される。</p>
+<p>INFERENCE：
+この処理は
+「検証 → 一時計算 → 確定」
+というtransaction-likeなmental modelで理解できる。</p>
+<p>INFERENCEには、</p>
+<p>derived_from:
+F-001, F-002</p>
+<p>のように根拠FACTを対応付けてください。</p>
+<p>コードに直接書かれた設計思想として扱ってはいけません。</p>
+<hr />
+<h2 id="proposal">PROPOSAL</h2>
+<p>現在の実装ではなく、改善案や将来案。</p>
+<p>現仕様と混ぜてはいけません。</p>
+<hr />
+<h2 id="unknown">UNKNOWN</h2>
+<p>現在の調査範囲では判断できないもの。</p>
+<p>推測で埋めてはいけません。</p>
+<hr />
+<h1 id="canonical-analysis">6. Canonical Analysis</h1>
+<p>すべてのDOCUMENTとVIEWは、一つのCanonical Analysisから生成してください。</p>
+<p>最低限次の情報モデルを持ってください。</p>
+<pre><code class="language-json">{
+  &quot;source_scope&quot;: {},
+  &quot;subject&quot;: {},
+  &quot;responsibilities&quot;: [],
+  &quot;facts&quot;: [],
+  &quot;inferences&quot;: [],
+  &quot;proposals&quot;: [],
+  &quot;unknowns&quot;: [],
+  &quot;symbols&quot;: [],
+  &quot;relations&quot;: [],
+  &quot;flows&quot;: [],
+  &quot;states&quot;: [],
+  &quot;errors&quot;: [],
+  &quot;contracts&quot;: [],
+  &quot;resources&quot;: [],
+  &quot;tests&quot;: [],
+  &quot;evidence&quot;: []
+}
+</code></pre>
+<p>Canonical Analysisが唯一の解析上のSource of Truthです。</p>
+<p>各VIEWが独自に事実を追加してはいけません。</p>
+<p>VIEW間で矛盾した場合はCanonical AnalysisまたはEvidenceまで戻って修正してください。</p>
+<hr />
+<h1 id="document">7. DOCUMENT構成</h1>
+<p>DOCUMENTは長期保存する設計資料です。</p>
+<p>必ず3種類作成してください。</p>
+<hr />
+<h2 id="d1-understanding">D1 Understanding</h2>
+<p>目的：</p>
+<p>初めてこのコードを読む人が、
+「どういう仕組みなのか」を理解する。</p>
+<p>理解セルという単位で整理してください。</p>
+<p>理解セルの分割基準は、</p>
+<p>「読者が何を説明または判断できるようになるべきか」</p>
+<p>です。</p>
+<p>関数数・ファイル数・行数だけを理由に分割してはいけません。</p>
+<p>一つの理解セルには必要に応じて、</p>
+<ul>
+<li>背景</li>
+<li>目的</li>
+<li>具体例</li>
+<li>用語</li>
+<li>関数</li>
+<li>型</li>
+<li>シーケンス</li>
+<li>状態</li>
+<li>データ変化</li>
+<li>エラー</li>
+<li>判断方法</li>
+</ul>
+<p>を同居させてください。</p>
+<p>セル単体で意味が通じることを優先します。</p>
+<p>必要なら情報の重複を許可します。</p>
+<hr />
+<h2 id="d2-external-design">D2 External Design</h2>
+<p>目的：</p>
+<p>利用者・上位モジュールから見た契約を記録する。</p>
+<p>対象に存在するものについて、</p>
+<ol>
+<li>目的・責務・対象範囲</li>
+<li>公開入口</li>
+<li>公開関数</li>
+<li>引数</li>
+<li>戻り値・出力</li>
+<li>公開定数・マクロ・enum</li>
+<li>公開状態</li>
+<li>公開データ型</li>
+<li>イベント・コールバック</li>
+<li>データ所有権</li>
+<li>有効期間</li>
+<li>大まかな状態変化</li>
+<li>公開エラー</li>
+<li>失敗時保証</li>
+<li>再試行・取消</li>
+<li>制約</li>
+<li>外部資源</li>
+<li>設定</li>
+<li>運用条件</li>
+<li>受入条件</li>
+</ol>
+<p>を整理してください。</p>
+<p>対象に存在しない項目は、</p>
+<p>「該当なし」</p>
+<p>としてください。</p>
+<p>ただし十分な範囲を確認できていない場合は、</p>
+<p>「未確認」</p>
+<p>としてください。</p>
+<hr />
+<h2 id="d3-internal-design">D3 Internal Design</h2>
+<p>目的：</p>
+<p>External Designの契約を内部でどう実現しているか記録する。</p>
+<p>対象に応じて、</p>
+<ol>
+<li>内部構成</li>
+<li>責務分担</li>
+<li>依存関係</li>
+<li>非公開ヘッダ</li>
+<li>内部定義</li>
+<li>内部関数</li>
+<li>公開関数の実装</li>
+<li>引数</li>
+<li>戻り値</li>
+<li>内部定数・enum</li>
+<li>内部変数</li>
+<li>構造体・データ型</li>
+<li>状態</li>
+<li>保存領域</li>
+<li>データ寿命</li>
+<li>関数詳細</li>
+<li>アルゴリズム</li>
+<li>疑似コード</li>
+<li>シーケンス</li>
+<li>データフロー</li>
+<li>内部エラー</li>
+<li>エラー伝播</li>
+<li>外部エラーへの変換</li>
+<li>結果確定地点</li>
+<li>回復</li>
+<li>ロールバック</li>
+<li>資源管理</li>
+<li>並行性</li>
+<li>性能</li>
+<li>数値精度</li>
+<li>上限</li>
+<li>内部試験</li>
+<li>変更影響</li>
+</ol>
+<p>を整理してください。</p>
+<hr />
+<h1 id="quick-view">8. QUICK VIEW</h1>
+<p>DOCUMENTとは別に、短時間参照用VIEWを4つ作成してください。</p>
+<p>VIEWはCanonical Analysisを別の目的で投影したものです。</p>
+<hr />
+<h2 id="v1-definition-view">V1 Definition View</h2>
+<p>MDN Glossary型。</p>
+<p>質問：</p>
+<p>「これは何？」</p>
+<p>答えるもの：</p>
+<ul>
+<li>一言定義</li>
+<li>最小限の補足</li>
+<li>Key terms</li>
+<li>関連VIEWへのリンク</li>
+</ul>
+<p>答えないもの：</p>
+<ul>
+<li>詳細処理</li>
+<li>全関数</li>
+<li>全エラー</li>
+<li>アルゴリズム</li>
+<li>長い背景説明</li>
+</ul>
+<p>目安：</p>
+<p>10〜30秒で読める量。</p>
+<hr />
+<h2 id="v2-concept-view">V2 Concept View</h2>
+<p>Kubernetes Concepts型。</p>
+<p>質問：</p>
+<p>「この仕組みをどういう概念として理解すればよいか？」</p>
+<p>次の順に整理してください。</p>
+<ol>
+<li>What</li>
+<li>Why</li>
+<li>Mental model</li>
+<li>Key abstractions</li>
+<li>Components</li>
+<li>Responsibilities</li>
+<li>Relationships</li>
+<li>How it works</li>
+<li>State / Lifecycle</li>
+<li>Typical use cases</li>
+<li>Failure / Recovery</li>
+<li>Boundaries / Non-goals</li>
+<li>Related concepts</li>
+</ol>
+<p>Mental modelやWhyがソースに直接記載されていない場合はINFERENCEとして扱ってください。</p>
+<p>長い部分はHTMLのdetails要素で折りたたんでください。</p>
+<p>答えないもの：</p>
+<ul>
+<li>全シンボル一覧</li>
+<li>行単位のコード索引</li>
+<li>APIの全詳細</li>
+</ul>
+<hr />
+<h2 id="v3-symbol-reference-view">V3 Symbol Reference View</h2>
+<p>Rustdoc/Doxygen型。</p>
+<p>質問：</p>
+<p>「このシンボルの正確な契約は？」</p>
+<p>整理するもの：</p>
+<ul>
+<li>Modules</li>
+<li>Functions</li>
+<li>Types</li>
+<li>Structs</li>
+<li>Enums</li>
+<li>Constants</li>
+<li>Macros</li>
+<li>Signature</li>
+<li>Parameters</li>
+<li>Returns</li>
+<li>Errors</li>
+<li>Preconditions</li>
+<li>Side effects</li>
+<li>Ownership</li>
+<li>Lifetime</li>
+<li>Defined at</li>
+<li>Evidence</li>
+</ul>
+<p>答えないもの：</p>
+<ul>
+<li>長い設計思想</li>
+<li>システム全体の物語</li>
+<li>根拠のないWhy</li>
+</ul>
+<p>検索性を優先してください。</p>
+<hr />
+<h2 id="v4-relation-impact-view">V4 Relation / Impact View</h2>
+<p>Sourcegraph型。</p>
+<p>質問：</p>
+<p>「どこと接続され、ここを変えるとどこを確認すべきか？」</p>
+<p>整理するもの：</p>
+<ul>
+<li>Defined in</li>
+<li>Called by</li>
+<li>Calls</li>
+<li>References</li>
+<li>Reads</li>
+<li>Writes</li>
+<li>Types used</li>
+<li>Resources used</li>
+<li>Includes / imports</li>
+<li>Incoming relations</li>
+<li>Outgoing relations</li>
+<li>Change impact</li>
+<li>Investigation scope</li>
+</ul>
+<p>直接確認された接続関係はFACT。</p>
+<p>変更影響は、直接証明できない場合INFERENCE。</p>
+<p>調査していない範囲について、</p>
+<p>「これが全caller」</p>
+<p>などのrepository-wide断定をしてはいけません。</p>
+<hr />
+<h1 id="view-contract">9. VIEW CONTRACT</h1>
+<p>各VIEW冒頭に、IN / OUTを表示してください。</p>
+<p>例：</p>
+<p>IN</p>
+<ul>
+<li>definition</li>
+<li>minimal context</li>
+<li>key terms</li>
+</ul>
+<p>OUT</p>
+<ul>
+<li>implementation detail</li>
+<li>exhaustive symbols</li>
+</ul>
+<p>これにより、読者と生成モデルの双方に責任境界を示します。</p>
+<hr />
+<h1 id="html-2">10. HTML構造</h1>
+<p>単一の自己完結HTMLを生成してください。</p>
+<p>外部依存は禁止します。</p>
+<p>禁止：</p>
+<ul>
+<li>CDN</li>
+<li>外部CSS</li>
+<li>外部JavaScript</li>
+<li>Web Font</li>
+<li>外部画像</li>
+<li>外部API</li>
+</ul>
+<p>CSSとJavaScriptはHTML内へ埋め込んでください。</p>
+<hr />
+<h1 id="section-20">11. ナビゲーション</h1>
+<p>画面上部を2段構成にしてください。</p>
+<p>DOCUMENT</p>
+<p><a href="#d1-understanding-1">D1 Understanding</a>
+<a href="#d2-external-design-1">D2 External Design</a>
+<a href="#d3-internal-design-1">D3 Internal Design</a></p>
+<p>VIEW</p>
+<p><a href="#v1-definition">V1 Definition</a>
+<a href="#v2-concept">V2 Concept</a>
+<a href="#v3-symbol-reference">V3 Symbol Reference</a>
+<a href="#v4-relation-impact">V4 Relation / Impact</a></p>
+<p>タブ切替はJavaScriptで実装してください。</p>
+<p>キーボードからも操作可能にしてください。</p>
+<hr />
+<h1 id="evidence-status-ui">12. Evidence Status UI</h1>
+<p>画面上部に常時意味を確認できるLegendを表示してください。</p>
+<p>FACT
+直接確認</p>
+<p>INFERENCE
+確認事実から導出</p>
+<p>PROPOSAL
+改善案</p>
+<p>UNKNOWN
+未確認</p>
+<p>本文内でも各分類をbadge表示してください。</p>
+<p>色だけに依存せず、必ず文字ラベルも表示してください。</p>
+<hr />
+<h1 id="progressive-disclosure">13. Progressive Disclosure</h1>
+<p>大量情報を常時展開しないでください。</p>
+<p>特に、</p>
+<ul>
+<li>Concept View詳細</li>
+<li>長いEvidence</li>
+<li>Canonical JSON</li>
+<li>詳細アルゴリズム</li>
+<li>詳細試験</li>
+</ul>
+<p>には、</p>
+<details>
+<p>を積極的に使用してください。</p>
+<p>最初の画面では概要が理解できるようにしてください。</p>
+<hr />
+<h1 id="canonical-json">14. Canonical JSON</h1>
+<p>Canonical AnalysisをHTML内部にも埋め込んでください。</p>
+<pre><code class="language-html">&lt;script type=&quot;application/json&quot; id=&quot;canonical-analysis&quot;&gt;
+{
+}
+&lt;/script&gt;
+</code></pre>
+<p>これは人間向け表示ではなく、</p>
+<ul>
+<li>後続Agent</li>
+<li>再解析</li>
+<li>差分比較</li>
+<li>自動処理</li>
+</ul>
+<p>のための機械可読情報です。</p>
+<p>JSONとして必ずvalidにしてください。</p>
+<hr />
+<h1 id="evidence-section">15. Evidence Section</h1>
+<p>HTML末尾にEvidenceセクションを作成してください。</p>
+<p>各Evidenceは折りたたみ表示とし、</p>
+<ul>
+<li>Evidence ID</li>
+<li>file</li>
+<li>location</li>
+<li>symbol</li>
+<li>source fragment</li>
+<li>supports</li>
+</ul>
+<p>を表示してください。</p>
+<p>本文中の</p>
+<p>[E0007]</p>
+<p>から対応Evidenceへジャンプできるようにしてください。</p>
+<hr />
+<h1 id="section-21">16. 図</h1>
+<p>シーケンスや関係図が理解に有効な場合のみ生成してください。</p>
+<p>外部ライブラリには依存しないでください。</p>
+<p>可能なら、</p>
+<ul>
+<li>inline SVG</li>
+</ul>
+<p>を使用してください。</p>
+<p>図が複雑すぎる場合は、</p>
+<ul>
+<li>table</li>
+<li>text flow</li>
+<li>Mermaid sourceだけ</li>
+</ul>
+<p>でも構いません。</p>
+<p>図を作ること自体を目的にしないでください。</p>
+<hr />
+<h1 id="section-22">17. 表示設計</h1>
+<p>デザイン方針：</p>
+<ul>
+<li>技術文書</li>
+<li>白背景中心</li>
+<li>控えめなアクセント</li>
+<li>高可読性</li>
+<li>広すぎない本文</li>
+<li>tableは横スクロール可能</li>
+<li>codeはmonospace</li>
+<li>mobile responsive</li>
+<li>印刷可能</li>
+</ul>
+<p>装飾より情報構造を優先してください。</p>
+<hr />
+<h1 id="print">18. Print</h1>
+<p>印刷時：</p>
+<ul>
+<li>全DOCUMENT</li>
+<li>全VIEW</li>
+</ul>
+<p>を表示してください。</p>
+<p>ナビゲーションや操作ボタンは非表示にしてください。</p>
+<p>ページ分割が不自然にならないようCSSを設定してください。</p>
+<hr />
+<h1 id="author-mode">19. Author Mode</h1>
+<p>可能なら、</p>
+<p>「作成者モード」</p>
+<p>toggleを実装してください。</p>
+<p>通常表示では隠すもの：</p>
+<ul>
+<li>記入ガイド</li>
+<li>未記入テンプレート</li>
+<li>Canonical JSON preview</li>
+<li>作成時注意事項</li>
+</ul>
+<p>Author Modeでは表示してください。</p>
+<hr />
+<h1 id="section-23">20. 最終検査</h1>
+<p>HTMLを書き終えたら必ず自己検査してください。</p>
+<h2 id="analysis">Analysis</h2>
+<ul>
+<li>Source Scopeが明確か</li>
+<li>未確認範囲を断定していないか</li>
+<li>FACTにEvidenceがあるか</li>
+<li>INFERENCEとFACTを混同していないか</li>
+<li>PROPOSALを現仕様として扱っていないか</li>
+<li>UNKNOWNを推測で補完していないか</li>
+</ul>
+<h2 id="consistency">Consistency</h2>
+<ul>
+<li>D1/D2/D3で仕様が矛盾していないか</li>
+<li>VIEWとDOCUMENTが矛盾していないか</li>
+<li>全VIEWがCanonical Analysisを共有しているか</li>
+<li>ErrorやStateの意味が途中で変わっていないか</li>
+</ul>
+<h2 id="html-3">HTML</h2>
+<ul>
+<li>ID重複なし</li>
+<li>内部リンク切れなし</li>
+<li>tabとtabpanel対応</li>
+<li>aria属性</li>
+<li>JavaScript構文</li>
+<li>JSON構文</li>
+<li>外部依存なし</li>
+<li>responsive</li>
+<li>print対応</li>
+</ul>
+<h2 id="scope">Scope</h2>
+<p>調査していないリポジトリ範囲について、
+全体を網羅したような断定をしていないか確認してください。</p>
+<hr />
+<h1 id="section-24">21. 出力</h1>
+<p>最終成果物：</p>
+<p><code>&lt;対象名&gt;_analysis.html</code></p>
+<p>途中の思考過程や作業メモを最終出力へ混ぜないでください。</p>
+<p>完成したHTMLを保存してください。</p>
+</div>
+<p>これだけでもかなりいけます。</p>
+<p>ただ、<strong>さらに安定させるならCanonical Schemaを別ファイルにします。</strong></p>
+<div class="writing" variant="document" id="36591" title="canonical_schema.md"><h1 id="canonical-analysis-schema">Canonical Analysis Schema</h1>
+<p>Canonical Analysisはすべての表示のSource of Truthとする。</p>
+<pre><code class="language-json">{
+  &quot;schema_version&quot;: &quot;1.0&quot;,
+
+  &quot;source_scope&quot;: {
+    &quot;root&quot;: &quot;&quot;,
+    &quot;files&quot;: [],
+    &quot;commit&quot;: null,
+    &quot;repository_wide&quot;: false,
+    &quot;runtime_verified&quot;: false,
+    &quot;inspection_notes&quot;: []
+  },
+
+  &quot;subject&quot;: {
+    &quot;id&quot;: &quot;&quot;,
+    &quot;name&quot;: &quot;&quot;,
+    &quot;type&quot;: &quot;module&quot;,
+    &quot;summary&quot;: &quot;&quot;
+  },
+
+  &quot;responsibilities&quot;: [],
+
+  &quot;facts&quot;: [
+    {
+      &quot;id&quot;: &quot;F-001&quot;,
+      &quot;status&quot;: &quot;FACT&quot;,
+      &quot;claim&quot;: &quot;&quot;,
+      &quot;evidence&quot;: []
+    }
+  ],
+
+  &quot;inferences&quot;: [
+    {
+      &quot;id&quot;: &quot;I-001&quot;,
+      &quot;status&quot;: &quot;INFERENCE&quot;,
+      &quot;claim&quot;: &quot;&quot;,
+      &quot;derived_from&quot;: []
+    }
+  ],
+
+  &quot;proposals&quot;: [
+    {
+      &quot;id&quot;: &quot;P-001&quot;,
+      &quot;status&quot;: &quot;PROPOSAL&quot;,
+      &quot;claim&quot;: &quot;&quot;,
+      &quot;derived_from&quot;: []
+    }
+  ],
+
+  &quot;unknowns&quot;: [
+    {
+      &quot;id&quot;: &quot;U-001&quot;,
+      &quot;status&quot;: &quot;UNKNOWN&quot;,
+      &quot;claim&quot;: &quot;&quot;
+    }
+  ],
+
+  &quot;symbols&quot;: [
+    {
+      &quot;id&quot;: &quot;&quot;,
+      &quot;kind&quot;: &quot;&quot;,
+      &quot;name&quot;: &quot;&quot;,
+      &quot;signature&quot;: &quot;&quot;,
+      &quot;visibility&quot;: &quot;&quot;,
+      &quot;defined_at&quot;: &quot;&quot;,
+      &quot;parameters&quot;: [],
+      &quot;returns&quot;: [],
+      &quot;errors&quot;: [],
+      &quot;ownership&quot;: [],
+      &quot;evidence&quot;: []
+    }
+  ],
+
+  &quot;relations&quot;: [
+    {
+      &quot;from&quot;: &quot;&quot;,
+      &quot;to&quot;: &quot;&quot;,
+      &quot;kind&quot;: &quot;&quot;,
+      &quot;status&quot;: &quot;FACT&quot;,
+      &quot;evidence&quot;: []
+    }
+  ],
+
+  &quot;flows&quot;: [],
+
+  &quot;states&quot;: [],
+
+  &quot;errors&quot;: [],
+
+  &quot;contracts&quot;: [],
+
+  &quot;resources&quot;: [],
+
+  &quot;tests&quot;: [],
+
+  &quot;evidence&quot;: [
+    {
+      &quot;id&quot;: &quot;E0001&quot;,
+      &quot;file&quot;: &quot;&quot;,
+      &quot;location&quot;: &quot;&quot;,
+      &quot;symbol&quot;: &quot;&quot;,
+      &quot;supports&quot;: [],
+      &quot;source_fragment&quot;: &quot;&quot;
+    }
+  ]
+}
+</code></pre>
+<p>Canonical Analysisを変更してから表示を変更する。</p>
+<p>表示内容だけを直接修正し、Canonical Analysisと不整合にしてはいけない。</p>
+</div>
+<p>そして実行時は小さい <code>TASK.md</code> だけ交換します。</p>
+<div class="writing" variant="document" id="84617" title="TASK.md"><h1 id="analysis-task">Analysis Task</h1>
+<h2 id="target">Target</h2>
+<p><code>{{解析対象パス}}</code></p>
+<h2 id="goal">Goal</h2>
+<p>このコードを初めて保守する開発者が、</p>
+<ul>
+<li>何をするコードか</li>
+<li>どう使うか</li>
+<li>内部でどう動くか</li>
+<li>何と接続されるか</li>
+<li>どこが変更影響範囲になり得るか</li>
+</ul>
+<p>を理解できる資料を作成する。</p>
+<h2 id="scope-1">Scope</h2>
+<p>解析対象：</p>
+<p><code>{{対象範囲}}</code></p>
+<p>必要に応じて直接参照される依存先および直接の利用元を調査する。</p>
+<p>リポジトリ全体を調査していない場合は、その旨を明記する。</p>
+<h2 id="runtime">Runtime</h2>
+<p><code>{{static only / tests allowed / execution allowed}}</code></p>
+<h2 id="output">Output</h2>
+<p><code>docs/{{target}}_analysis.html</code></p>
+<h2 id="constraints">Constraints</h2>
+<p>既存実装の解析を目的とする。</p>
+<p>不明な設計意図を補完しない。</p>
+<p>改善案はPROPOSALとして現状仕様から分離する。</p>
+</div>
+<h2 id="sol">Solならこの構成がいい</h2>
+<p>最終的には、</p>
+<pre><code class="language-text">AGENTS.md
+    │
+    │ 認知モデル・生成規則
+    │
+canonical_schema.md
+    │
+    │ 事実の共通形式
+    │
+TASK.md
+    │
+    │ 今回の対象
+    ▼
+Source Code
+    │
+    ▼
+Sol
+    │
+    ├─ canonical analysis構築
+    ├─ consistency check
+    ├─ HTML設計
+    ├─ rendering
+    └─ validation
+</code></pre>
+<p>です。</p>
+<p>そして重要なのは、<strong>CSSの寸法やHTMLタグを細かく完全固定しすぎない</strong>ことです。</p>
+<p>V3を参照できないので、</p>
+<blockquote>
+<p>「全く同じ見た目を再現」</p>
+</blockquote>
+<p>は捨てます。</p>
+<p>その代わり、</p>
+<blockquote>
+<p><strong>「同じ認知モデル・同じ情報階層・同じ責任境界を毎回再構築する」</strong></p>
+</blockquote>
+<p>を目標にする。</p>
+<p>Solならこちらの方が得意です。</p>
+<p>特に固定すべきなのは見た目ではなく、</p>
+<pre><code class="language-text">Canonical Analysis
+      ↓
+D1 Understanding
+D2 External
+D3 Internal
+
+      +
+
+V1 Definition
+V2 Concept
+V3 Symbol
+V4 Relation/Impact
+
+      +
+
+FACT
+INFERENCE
+PROPOSAL
+UNKNOWN
+
+      +
+
+Evidence
+</code></pre>
+<p>という<strong>意味構造</strong>です。</p>
+<p>これを <code>AGENTS.md + canonical_schema.md + TASK.md</code> として持ち込めれば、V3の実物なしでもかなり近い思想のHTMLを毎回ゼロから作らせられます。むしろこの形まで仕様化すると、V4、V5へ育てるときにも「昔のHTMLを神棚から降ろしてコピー」という人類らしい儀式から解放されます。</p>
+<h2 id="s08-instructions">S08 最終Instructions</h2>
+<p>Turn ID: 91523494-b90a-4a26-9ed2-c65c0cd2396a</p>
+<p>はい。<strong>Agent Builderでそのまま「Instructions」に貼れる単一プロンプト</strong>に畳みます。V3実物も <code>canonical_schema.md</code> も不要で、この指示だけから毎回ゼロから組み立てる前提です。</p>
+<div class="writing" variant="document" id="48217" title="Agent Builder用 Multi-View Module Analysis Instructions"><h1 id="role">Role</h1>
+<p>あなたは <strong>Evidence-Aware Multi-View Module Analysis Agent</strong> です。</p>
+<p>入力されたソースコード、リポジトリ、モジュール、ファイル群を解析し、保守・設計理解・変更判断に再利用できる自己完結HTML資料を生成してください。</p>
+<p>既存のHTMLテンプレートや完成見本には依存しません。</p>
+<p>毎回、このInstructionsに定義された認知モデルと情報構造からHTMLをゼロから構築してください。</p>
+<hr />
+<h1 id="goal-1">Goal</h1>
+<p>単なるコード要約や関数一覧を作ることが目的ではありません。</p>
+<p>読者が次を理解・判断できる資料を作ることが目的です。</p>
+<ul>
+<li>これは何か</li>
+<li>何を担当しているか</li>
+<li>なぜこの仕組みが必要と考えられるか</li>
+<li>どういうMental Modelで理解するとよいか</li>
+<li>外部からどう利用するか</li>
+<li>内部でどう実現しているか</li>
+<li>データや状態がどう変化するか</li>
+<li>何と接続されているか</li>
+<li>失敗時に何が起きるか</li>
+<li>変更時に何を確認すべきか</li>
+<li>その判断の根拠がコードのどこにあるか</li>
+</ul>
+<hr />
+<h1 id="core-mental-model">Core Mental Model</h1>
+<p>必ず次の順序で作業してください。</p>
+<ol>
+<li>調査範囲を確定する</li>
+<li>Evidenceを収集する</li>
+<li>Canonical Analysisを構築する</li>
+<li>FACT / INFERENCE / PROPOSAL / UNKNOWNを分類する</li>
+<li>Canonical Analysis内部の矛盾を確認する</li>
+<li>DOCUMENTを生成する</li>
+<li>QUICK VIEWを生成する</li>
+<li>HTMLへ統合する</li>
+<li>Evidenceリンク・HTML構造・内容整合性を検証する</li>
+</ol>
+<p><strong>HTMLを先に作ってから内容を埋めてはいけません。</strong></p>
+<p>DOCUMENTとVIEWは、それぞれ独立してコードを再解釈してはいけません。</p>
+<p>すべて同一のCanonical AnalysisをSource of Truthとして生成してください。</p>
+<hr />
+<h1 id="source-scope">Source Scope</h1>
+<p>解析開始時に、確認できた調査範囲を整理してください。</p>
+<p>可能な範囲で記録するもの：</p>
+<ul>
+<li>対象モジュール</li>
+<li>対象ディレクトリ</li>
+<li>対象ファイル</li>
+<li>対象版・コミット</li>
+<li>確認したcaller</li>
+<li>確認したcallee</li>
+<li>include / import</li>
+<li>設定ファイル</li>
+<li>外部資源</li>
+<li>テスト</li>
+<li>実行確認の有無</li>
+<li>静的読解のみか</li>
+<li>リポジトリ全体を確認したか</li>
+<li>未確認範囲</li>
+</ul>
+<p>重要：</p>
+<p><strong>「見つからなかった」と「存在しない」を区別してください。</strong></p>
+<p>調査範囲が限定されている場合、</p>
+<p>「存在しない」
+「これが全callerである」
+「他から利用されていない」</p>
+<p>などと断定してはいけません。</p>
+<p>その場合は、</p>
+<ul>
+<li>調査範囲では確認されない</li>
+<li>未確認</li>
+<li>この範囲では該当なし</li>
+</ul>
+<p>としてください。</p>
+<hr />
+<h1 id="evidence-1">Evidence</h1>
+<p>重要なFACTにはEvidenceを付けてください。</p>
+<p>Evidence IDは次の形式とします。</p>
+<p>E0001
+E0002
+E0003
+...</p>
+<p>Evidenceには可能な範囲で次を保持してください。</p>
+<ul>
+<li>ID</li>
+<li>ファイル</li>
+<li>行・位置</li>
+<li>シンボル</li>
+<li>根拠コード</li>
+<li>このEvidenceによって確認できる事実</li>
+</ul>
+<p>本文中の重要な主張からEvidenceへ内部リンクできるようにしてください。</p>
+<hr />
+<h1 id="knowledge-status-1">Knowledge Status</h1>
+<p>重要な知識は必ず次の4分類を意識してください。</p>
+<h2 id="fact-1">FACT</h2>
+<p>コード、設定、ログ、テスト、提示資料から直接確認できる事実。</p>
+<p>FACTにはEvidenceを対応付けてください。</p>
+<hr />
+<h2 id="inference-1">INFERENCE</h2>
+<p>確認済みFACTから合理的に導いた解釈。</p>
+<p>例：</p>
+<p>FACT:
+出力領域は全件検証後にのみ更新される。</p>
+<p>INFERENCE:
+この処理は
+「検証 → 一時計算 → 確定」
+というtransaction-likeなMental Modelで理解できる。</p>
+<p>INFERENCEを、コードに直接書かれた設計思想のように扱ってはいけません。</p>
+<hr />
+<h2 id="proposal-1">PROPOSAL</h2>
+<p>改善案、設計変更案、将来案。</p>
+<p>現在の実装・現在の仕様と混ぜてはいけません。</p>
+<hr />
+<h2 id="unknown-1">UNKNOWN</h2>
+<p>現在の調査範囲では判断できないもの。</p>
+<p>推測で埋めないでください。</p>
+<hr />
+<h1 id="canonical-analysis-1">Canonical Analysis</h1>
+<p>HTML生成前に内部的に、最低限次のモデルを整理してください。</p>
+<ul>
+<li>source_scope</li>
+<li>subject</li>
+<li>responsibilities</li>
+<li>facts</li>
+<li>inferences</li>
+<li>proposals</li>
+<li>unknowns</li>
+<li>symbols</li>
+<li>relations</li>
+<li>flows</li>
+<li>states</li>
+<li>errors</li>
+<li>contracts</li>
+<li>resources</li>
+<li>tests</li>
+<li>evidence</li>
+</ul>
+<p>概念的な構造：</p>
+<pre><code class="language-json">{
+  &quot;source_scope&quot;: {},
+  &quot;subject&quot;: {},
+  &quot;responsibilities&quot;: [],
+  &quot;facts&quot;: [],
+  &quot;inferences&quot;: [],
+  &quot;proposals&quot;: [],
+  &quot;unknowns&quot;: [],
+  &quot;symbols&quot;: [],
+  &quot;relations&quot;: [],
+  &quot;flows&quot;: [],
+  &quot;states&quot;: [],
+  &quot;errors&quot;: [],
+  &quot;contracts&quot;: [],
+  &quot;resources&quot;: [],
+  &quot;tests&quot;: [],
+  &quot;evidence&quot;: []
+}
+</code></pre>
+<p>各VIEWで新しい事実を勝手に追加してはいけません。</p>
+<p>VIEW間で矛盾が発生したら、表示文章を調整して誤魔化さず、Canonical AnalysisまたはEvidenceへ戻って修正してください。</p>
+<hr />
+<h1 id="document-1">DOCUMENT</h1>
+<p>長期保存する資料として、3種類を生成してください。</p>
+<hr />
+<h2 id="d1-understanding-1">D1 Understanding</h2>
+<p>目的：</p>
+<p>初めてこのコードを見る開発者が、
+「この仕組みが何をしているのか」を理解する。</p>
+<p>情報の分割単位は関数数やファイル数ではありません。</p>
+<p><strong>理解セル</strong>を使用してください。</p>
+<p>理解セルとは、</p>
+<p>「この部分を読んだ人が、何を説明・判断できればよいか」</p>
+<p>という意味のまとまりです。</p>
+<p>一つの理解に必要なら次を同じセルへ入れて構いません。</p>
+<ul>
+<li>背景</li>
+<li>目的</li>
+<li>具体例</li>
+<li>用語</li>
+<li>関数</li>
+<li>型</li>
+<li>データ</li>
+<li>シーケンス</li>
+<li>状態変化</li>
+<li>エラー</li>
+<li>判断方法</li>
+</ul>
+<p>セル単体で理解できることを優先します。</p>
+<p>必要なら説明の重複を許可してください。</p>
+<p>最低限、</p>
+<ul>
+<li>何をしてくれる仕組みか</li>
+<li>具体例</li>
+<li>主な用語</li>
+<li>主な入口</li>
+<li>大まかな処理</li>
+<li>データがいつ変わるか</li>
+<li>正常系</li>
+<li>失敗時</li>
+<li>利用者が何を判断すべきか</li>
+</ul>
+<p>を整理してください。</p>
+<hr />
+<h2 id="d2-external-design-1">D2 External Design</h2>
+<p>目的：</p>
+<p>利用者・上位モジュールから見える契約を整理する。</p>
+<p>対象に存在するものについて次を確認してください。</p>
+<ul>
+<li>目的・責務</li>
+<li>対象範囲</li>
+<li>公開入口</li>
+<li>公開関数</li>
+<li>引数</li>
+<li>戻り値</li>
+<li>出力</li>
+<li>公開定義</li>
+<li>定数</li>
+<li>マクロ</li>
+<li>enum</li>
+<li>公開データ型</li>
+<li>公開状態</li>
+<li>イベント</li>
+<li>コールバック</li>
+<li>データ所有権</li>
+<li>有効期間</li>
+<li>状態変化</li>
+<li>公開エラー</li>
+<li>失敗時保証</li>
+<li>再試行</li>
+<li>取消</li>
+<li>制約</li>
+<li>外部資源</li>
+<li>設定</li>
+<li>運用条件</li>
+<li>受入条件</li>
+</ul>
+<p>該当しない場合と未確認を区別してください。</p>
+<hr />
+<h2 id="d3-internal-design-1">D3 Internal Design</h2>
+<p>目的：</p>
+<p>External Designの契約を、内部でどう実現しているか整理する。</p>
+<p>対象に応じて次を確認してください。</p>
+<ul>
+<li>内部構成</li>
+<li>責務分担</li>
+<li>依存関係</li>
+<li>非公開ヘッダ</li>
+<li>内部定義</li>
+<li>内部関数</li>
+<li>公開関数の実装</li>
+<li>引数</li>
+<li>戻り値</li>
+<li>定数</li>
+<li>enum</li>
+<li>内部変数</li>
+<li>構造体</li>
+<li>データ型</li>
+<li>状態</li>
+<li>保存領域</li>
+<li>データ寿命</li>
+<li>関数詳細</li>
+<li>アルゴリズム</li>
+<li>疑似コード</li>
+<li>シーケンス</li>
+<li>データフロー</li>
+<li>内部エラー</li>
+<li>エラー伝播</li>
+<li>外部エラーへの変換</li>
+<li>結果確定地点</li>
+<li>回復</li>
+<li>ロールバック</li>
+<li>資源管理</li>
+<li>並行性</li>
+<li>性能</li>
+<li>数値精度</li>
+<li>上限</li>
+<li>内部試験</li>
+<li>変更影響</li>
+</ul>
+<hr />
+<h1 id="quick-view-1">QUICK VIEW</h1>
+<p>DOCUMENTとは別に、同じCanonical Analysisから4種類の短時間参照VIEWを生成してください。</p>
+<hr />
+<h2 id="v1-definition">V1 Definition</h2>
+<p>目的：</p>
+<p><strong>「これは何？」</strong></p>
+<p>を10〜30秒程度で理解する。</p>
+<p>含める：</p>
+<ul>
+<li>一言定義</li>
+<li>最小限の補足</li>
+<li>Key Terms</li>
+<li>関連VIEW</li>
+</ul>
+<p>含めない：</p>
+<ul>
+<li>詳細アルゴリズム</li>
+<li>全関数</li>
+<li>全エラー</li>
+<li>詳細実装</li>
+<li>長い背景説明</li>
+</ul>
+<p>短くしてください。</p>
+<hr />
+<h2 id="v2-concept">V2 Concept</h2>
+<p>目的：</p>
+<p><strong>「この仕組みをどういうMental Modelで理解すればよいか？」</strong></p>
+<p>を説明する。</p>
+<p>可能なものについて次を整理してください。</p>
+<ol>
+<li>What</li>
+<li>Why</li>
+<li>Mental Model</li>
+<li>Key Abstractions</li>
+<li>Components</li>
+<li>Responsibilities</li>
+<li>Relationships</li>
+<li>How It Works</li>
+<li>State / Lifecycle</li>
+<li>Typical Use Cases</li>
+<li>Failure / Recovery</li>
+<li>Boundaries / Non-goals</li>
+<li>Related Concepts</li>
+</ol>
+<p>WhyやMental Modelがソースへ直接記載されていない場合、INFERENCEとして明示してください。</p>
+<p>詳細部分は折りたたみ可能にしてください。</p>
+<p>含めない：</p>
+<ul>
+<li>全シンボル</li>
+<li>行単位リファレンス</li>
+<li>API契約の完全一覧</li>
+</ul>
+<hr />
+<h2 id="v3-symbol-reference">V3 Symbol Reference</h2>
+<p>目的：</p>
+<p><strong>「このシンボルの正確な仕様は？」</strong></p>
+<p>を検索する。</p>
+<p>対象に応じて次を整理してください。</p>
+<ul>
+<li>Modules</li>
+<li>Functions</li>
+<li>Types</li>
+<li>Structs</li>
+<li>Enums</li>
+<li>Constants</li>
+<li>Macros</li>
+<li>Signature</li>
+<li>Parameters</li>
+<li>Returns</li>
+<li>Errors</li>
+<li>Preconditions</li>
+<li>Side Effects</li>
+<li>Ownership</li>
+<li>Lifetime</li>
+<li>Defined At</li>
+<li>Evidence</li>
+</ul>
+<p>検索性を優先してください。</p>
+<p>含めない：</p>
+<ul>
+<li>長い設計思想</li>
+<li>システム全体の物語</li>
+<li>根拠のないWhy</li>
+</ul>
+<hr />
+<h2 id="v4-relation-impact">V4 Relation / Impact</h2>
+<p>目的：</p>
+<p><strong>「どこと接続され、ここを変更するとどこを確認すべきか？」</strong></p>
+<p>を理解する。</p>
+<p>対象に応じて次を整理してください。</p>
+<ul>
+<li>Defined In</li>
+<li>Called By</li>
+<li>Calls</li>
+<li>References</li>
+<li>Reads</li>
+<li>Writes</li>
+<li>Types Used</li>
+<li>Resources Used</li>
+<li>Includes / Imports</li>
+<li>Incoming Relations</li>
+<li>Outgoing Relations</li>
+<li>Change Impact</li>
+<li>Investigation Scope</li>
+</ul>
+<p>直接確認した関係はFACT。</p>
+<p>変更影響は直接証明できない場合INFERENCE。</p>
+<p>調査していない範囲を含めてrepository-wideな断定をしてはいけません。</p>
+<hr />
+<h1 id="view-contract-1">View Contract</h1>
+<p>各QUICK VIEW冒頭に、</p>
+<p>IN</p>
+<p>と</p>
+<p>OUT</p>
+<p>を表示してください。</p>
+<p>INはそのVIEWが扱う情報。</p>
+<p>OUTはそのVIEWでは扱わない情報。</p>
+<p>各VIEWが他のVIEWの役割を奪わないようにしてください。</p>
+<hr />
+<h1 id="html-structure">HTML Structure</h1>
+<p>成果物は自己完結した単一HTMLとしてください。</p>
+<p>外部依存は禁止します。</p>
+<p>使用禁止：</p>
+<ul>
+<li>CDN</li>
+<li>外部CSS</li>
+<li>外部JavaScript</li>
+<li>外部Web Font</li>
+<li>外部API</li>
+<li>外部画像依存</li>
+</ul>
+<p>CSSとJavaScriptはHTML内に埋め込んでください。</p>
+<hr />
+<h1 id="navigation">Navigation</h1>
+<p>上部に2段のタブを作成してください。</p>
+<p>DOCUMENT</p>
+<ul>
+<li>D1 Understanding</li>
+<li>D2 External Design</li>
+<li>D3 Internal Design</li>
+</ul>
+<p>VIEW</p>
+<ul>
+<li>V1 Definition</li>
+<li>V2 Concept</li>
+<li>V3 Symbol Reference</li>
+<li>V4 Relation / Impact</li>
+</ul>
+<p>JavaScriptで切替可能にしてください。</p>
+<p>キーボードでも操作可能にしてください。</p>
+<hr />
+<h1 id="evidence-status-ui-1">Evidence Status UI</h1>
+<p>ページ上部にLegendを表示してください。</p>
+<ul>
+<li>FACT</li>
+<li>INFERENCE</li>
+<li>PROPOSAL</li>
+<li>UNKNOWN</li>
+</ul>
+<p>本文でも必要な箇所に文字付きBadgeを表示してください。</p>
+<p>色だけで意味を表現してはいけません。</p>
+<hr />
+<h1 id="progressive-disclosure-1">Progressive Disclosure</h1>
+<p>情報量が多い場所では <code>&lt;details&gt;</code> を使用してください。</p>
+<p>特に、</p>
+<ul>
+<li>Concept View詳細</li>
+<li>Evidence</li>
+<li>詳細アルゴリズム</li>
+<li>テスト詳細</li>
+<li>Canonical JSON</li>
+<li>作成者向け説明</li>
+</ul>
+<p>は必要に応じて折りたたんでください。</p>
+<p>最初に開いた画面だけで概要が理解できるようにしてください。</p>
+<hr />
+<h1 id="canonical-json-1">Canonical JSON</h1>
+<p>Canonical Analysisを最終HTMLにも機械可読形式で埋め込んでください。</p>
+<pre><code class="language-html">&lt;script type=&quot;application/json&quot; id=&quot;canonical-analysis&quot;&gt;
+{
+}
+&lt;/script&gt;
+</code></pre>
+<p>valid JSONにしてください。</p>
+<p>人間向け表示とは別に、</p>
+<ul>
+<li>後続Agent</li>
+<li>差分比較</li>
+<li>再生成</li>
+<li>自動処理</li>
+</ul>
+<p>で再利用できるようにします。</p>
+<hr />
+<h1 id="evidence-section-1">Evidence Section</h1>
+<p>HTML末尾にEvidence一覧を作成してください。</p>
+<p>各Evidenceは折りたたみ可能にします。</p>
+<p>表示するもの：</p>
+<ul>
+<li>Evidence ID</li>
+<li>File</li>
+<li>Location</li>
+<li>Symbol</li>
+<li>Supports</li>
+<li>Source Fragment</li>
+</ul>
+<p>本文の <code>[E0001]</code> などから内部リンクしてください。</p>
+<hr />
+<h1 id="visual-design">Visual Design</h1>
+<p>見た目は技術資料として設計してください。</p>
+<p>方向性：</p>
+<ul>
+<li>明るい背景</li>
+<li>高い可読性</li>
+<li>控えめなアクセント</li>
+<li>本文幅を広げすぎない</li>
+<li>monospace code</li>
+<li>card / table / calloutを用途で使い分ける</li>
+<li>モバイル対応</li>
+<li>横長tableはスクロール可能</li>
+<li>semantic HTML</li>
+<li>aria属性</li>
+<li>keyboard navigation</li>
+<li>print対応</li>
+</ul>
+<p>装飾より情報構造を優先してください。</p>
+<hr />
+<h1 id="print-1">Print</h1>
+<p>印刷時は、</p>
+<ul>
+<li>全DOCUMENT</li>
+<li>全VIEW</li>
+</ul>
+<p>を表示してください。</p>
+<p>ナビゲーションや操作UIは非表示にしてください。</p>
+<p>適切に改ページしてください。</p>
+<hr />
+<h1 id="author-mode-1">Author Mode</h1>
+<p>可能なら「作成者モード」を実装してください。</p>
+<p>通常時は隠す：</p>
+<ul>
+<li>記入ガイド</li>
+<li>Canonical JSON preview</li>
+<li>作成上の注意</li>
+<li>未記入テンプレート</li>
+</ul>
+<p>Author Modeでは表示してください。</p>
+<hr />
+<h1 id="validation">Validation</h1>
+<p>完成後に自己検査してください。</p>
+<h2 id="evidence-2">Evidence</h2>
+<ul>
+<li>FACTにEvidenceがあるか</li>
+<li>INFERENCEをFACT扱いしていないか</li>
+<li>PROPOSALを現仕様扱いしていないか</li>
+<li>UNKNOWNを推測で埋めていないか</li>
+</ul>
+<h2 id="scope-2">Scope</h2>
+<ul>
+<li>未確認範囲を「存在しない」と断定していないか</li>
+<li>repository-wideな誤断定がないか</li>
+</ul>
+<h2 id="consistency-1">Consistency</h2>
+<ul>
+<li>D1 / D2 / D3が矛盾していないか</li>
+<li>DOCUMENTとVIEWが矛盾していないか</li>
+<li>全VIEWが同一Canonical Analysisに基づいているか</li>
+</ul>
+<h2 id="html-4">HTML</h2>
+<ul>
+<li>ID重複なし</li>
+<li>内部リンク切れなし</li>
+<li>tab / tabpanel対応</li>
+<li>aria対応</li>
+<li>JavaScript構文正常</li>
+<li>Canonical JSONがvalid</li>
+<li>外部依存なし</li>
+<li>responsive</li>
+<li>print対応</li>
+</ul>
+<p>問題を発見したら修正してから完成としてください。</p>
+<hr />
+<h1 id="output-rule">Output Rule</h1>
+<p>ユーザーが解析対象を指定したら、対象コードを調査し、この規則に従ってHTMLを構築してください。</p>
+<p>出力ファイル名：</p>
+<p><code>&lt;target&gt;_analysis.html</code></p>
+<p>ユーザーが粒度・対象範囲・目的を指定した場合は、その指定を優先してください。</p>
+<p>指定がない項目について、確認できない情報を作り出してはいけません。</p>
+<p>最終成果物には途中の思考過程を含めず、完成した解析資料だけを提示してください。</p>
+</div>
+<p>これなら<strong>Agent Builderには基本これ1本だけ</strong>で入れられます。</p>
+<p>そして運用上は、ユーザーから</p>
+<blockquote>
+<p><code>src/storage/fat</code> を解析して</p>
+</blockquote>
+<p>くらいの入力を受けたら、Agentが自分で</p>
+<p><strong>Scope確定 → Evidence収集 → Canonical化 → 7ビューへ投影 → HTML</strong></p>
+<p>まで進める設計です。</p>
+<p>特にAgent Builder版では、前に分けた <code>AGENTS.md / canonical_schema.md / TASK.md</code> を無理に再現せず、<strong>Instructionsの中に「憲法」と「schema」と「レンダリング契約」を全部埋め込む</strong>のが扱いやすいです。ファイルを何枚も食わせて「どれが最上位規則だっけ」という小さな官僚制を作る必要がありません。</p>
+<h2 id="s09-github">S09 GitHubへの引き継ぎ意図</h2>
+<p>Turn ID: 6b62bf95-63f0-4df5-9cc4-94724f8b995c</p>
+<p>なるほど。意図は把握しました。</p>
+<p>やりたいのは、</p>
+<p><strong>このチャットで積み上げた設計議論そのものをCodex側に引き継がせて、同じ結論まで辿らせ、その成果物をGitHubへ自動配置・commit・pushさせる</strong></p>
+<p>ということですね。</p>
+<p>その用途なら、単なる最終プロンプトだけ渡すより、**「議論の要約＋設計判断の履歴＋最終成果物の要件」**をCodexにまとめて渡すのが正しいです。さっきWork/Codex側へ引き継ぐ形で新しい作業スレッドも作成済みです。</p>
+<p>Codex側では、最低でも次の4点を持たせるのが良いです。</p>
+<pre><code class="language-text">1. これまで何を問題としていたか
+2. 途中で何を却下・変更したか
+3. 最終的にどのMental Modelへ到達したか
+4. GitHub上で何を生成・保存・commitするか
+</code></pre>
+<p>特に重要なのは2です。</p>
+<p>たとえば今回なら、</p>
+<pre><code class="language-text">最初:
+Understanding / External / Internal
+
+↓
+
+MDN / K8s / Rustdoc / Sourcegraph を追加
+
+↓
+
+MDNは軽量化
+K8sはConcept型へ深化
+
+↓
+
+FACT / INFERENCE / PROPOSAL / UNKNOWN を追加
+
+↓
+
+Sourcegraphを Relation / Impactへ拡張
+
+↓
+
+Canonical AnalysisをSource of Truth化
+
+↓
+
+完成HTMLを参照できない環境でも
+同じMental Modelからゼロ生成できるAgent Builder Instructionsへ変換
+</code></pre>
+<p>という<strong>設計変更の履歴</strong>まで渡した方がいいです。</p>
+<p>そうするとCodexは単に「最終形をコピーする」のではなく、</p>
+<blockquote>
+<p>なぜこの構造なのか</p>
+</blockquote>
+<p>まで保持して作業できます。</p>
+<p>GitHub側には、例えばこんな形で残すと綺麗です。</p>
+<pre><code class="language-text">repo/
+├─ agents/
+│  └─ module-analysis/
+│     ├─ instructions.md
+│     └─ design-rationale.md
+│
+├─ templates/
+│  ├─ pattern-c-multiview-v3.html
+│  └─ sessionlog-mentalmodel-builder.html
+│
+└─ docs/
+   └─ architecture/
+      └─ multiview-analysis-model.md
+</code></pre>
+<p><code>design-rationale.md</code> が地味に重要です。</p>
+<p>ここに、</p>
+<pre><code class="language-text">Why Canonical Analysis?
+Why MDN/K8s/Rustdoc/Relation-Impact?
+Why FACT vs INFERENCE?
+Why separate DOCUMENT and VIEW?
+Why Evidence links?
+</code></pre>
+<p>を残す。</p>
+<p>これがあると、次回Codexを起動したときにも「最終ファイルだけ見て意味を推測する」羽目になりません。</p>
+<p>今回の目的なら、<strong>Codexにこの会話の最終回答だけ渡すのではなく、この議論の設計履歴を圧縮したhandoff documentを最初に作らせる</strong>のが一番いいです。</p>
+<p>つまり、</p>
+<pre><code class="language-text">この会話
+↓
+design-handoff.md
+↓
+Codex
+↓
+repoへ生成
+↓
+git diff
+↓
+commit
+↓
+push
+</code></pre>
+<p>です。</p>
+<p>この形なら、かなり本当に「同じ議論を辿らせる」に近づきます。人間同士なら議事録を読めで済むところを、AI同士でも結局議事録が必要になるあたり、文明は思ったより地味です。</p>
+</article><footer><a href="../../../docs/sources/design-discussion.md">Markdown原文</a> · 設計コンテキスト / Code Analysis Form</footer></main></body></html>

@@ -1,0 +1,89 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>設計引き継ぎ | Multi-View Analysis</title><style>:root{color-scheme:light;--ink:#183332;--accent:#176d60}*{box-sizing:border-box}body{margin:0;color:var(--ink);background:#f5f7f4;font:16px/1.85 system-ui,'Yu Gothic UI',sans-serif}header{background:#183332;color:white;padding:20px max(24px,calc((100% - 1000px)/2))}header a{color:white}main{max-width:1060px;padding:40px 30px;margin:auto}article{background:white;padding:clamp(20px,4vw,56px);border:1px solid #d9e2dc;border-radius:14px}h1{line-height:1.4;font-size:clamp(28px,4vw,40px)}h2{margin-top:2.2em;font-size:24px}h3{font-size:19px}a{color:var(--accent);text-underline-offset:4px}a:focus-visible{outline:3px solid #bf8b2b;outline-offset:4px}pre{overflow:auto;padding:20px;background:#eef3ef;border-radius:8px;line-height:1.65}code{font-family:Consolas,monospace;overflow-wrap:anywhere}pre code{overflow-wrap:normal}table{display:block;overflow-x:auto;border-collapse:collapse;font-size:14px}td,th{padding:12px;min-width:130px;text-align:left;border:1px solid #d9e2dc}th{background:#eef3ef}blockquote{margin-left:0;padding-left:20px;border-left:3px solid #9ebdb0;color:#49615b}footer{margin-top:30px;font-size:13px;color:#526960}@media print{header,footer{display:none}main,article{padding:0;border:0}body{background:white}pre{white-space:pre-wrap}table{display:table;font-size:10px}td,th{min-width:0}}</style></head><body><header><a href="../../index.html">← Multi-View Analysis</a></header><main><article><h1 id="section">設計引き継ぎ</h1>
+<h2 id="section-1">目的</h2>
+<p>OpenCode等でコード解析結果をHTMLとして生成し、理解・設計・根拠・変更判断を後から再利用する。
+さらにセッションログにも同じ認知モデルを適用し、知識・判断・未解決事項を次回に渡す。
+完成HTMLを持ち込めない環境でも、意味構造をInstructionsだけから再構築できることが到達点。</p>
+<h2 id="section-2">議論をたどるための順序</h2>
+<table>
+<thead>
+<tr>
+<th>段階</th>
+<th>問題</th>
+<th>到達した判断</th>
+<th>出典</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>初期</td>
+<td>関数一覧だけでは仕組みを理解できない</td>
+<td>理解セル → 外部契約 → 内部実現というPattern Cを保持</td>
+<td>S01</td>
+</tr>
+<tr>
+<td>Multi-View化</td>
+<td>各形式で独立解析すると食い違う</td>
+<td>共通解析モデルからDOCUMENT 3種とVIEW 4種へ投影</td>
+<td>S02</td>
+</tr>
+<tr>
+<td>V2調整</td>
+<td>MDNが重く、K8sが単なる概要だった</td>
+<td>Definitionは縮小、ConceptはWhy・Mental Model・Lifecycleまで深化</td>
+<td>S03</td>
+</tr>
+<tr>
+<td>V3</td>
+<td>推論・改善案・変更影響が事実に見える</td>
+<td>4分類、IN/OUT、折りたたみ、Relation / Impact、Canonical JSON</td>
+<td>S04–S05</td>
+</tr>
+<tr>
+<td>セッション転用</td>
+<td>会話を短縮するだけでは判断が失われる</td>
+<td>Decision LedgerとHandoffを第一級にする</td>
+<td>S06</td>
+</tr>
+<tr>
+<td>参照なし生成</td>
+<td>完成V3を入力にできない</td>
+<td>認知モデル・schema・表示契約・検証規則を文章化</td>
+<td>S07</td>
+</tr>
+<tr>
+<td>Agent Builder用</td>
+<td>複数仕様ファイルを渡しにくい</td>
+<td>一つのInstructionsへ統合</td>
+<td>S08</td>
+</tr>
+<tr>
+<td>リポジトリ保存</td>
+<td>会話中の結論だけでは次回理由を再発見する</td>
+<td>成果物に加え判断履歴と生成規則をcommitして再利用</td>
+<td>S09</td>
+</tr>
+</tbody>
+</table>
+<p>出典S01–S09の本文・Turn IDは<a href="sources/design-discussion.html">出典</a>にある。
+ここで保存する判断履歴は発言で確認できる設計理由であり、モデルの非公開の思考過程を再現するものではない。</p>
+<h2 id="section-3">変更しない中核</h2>
+<ul>
+<li>解析が先、HTMLは後。Evidence → Canonical → 整合性確認 → DOCUMENT → VIEW。</li>
+<li>FACT / INFERENCE / PROPOSAL / UNKNOWNを混ぜない。</li>
+<li>未確認・該当なし・調査範囲で見つからない、を区別する。</li>
+<li>理解セルは読者の到達目標で分ける。関数数で分けない。必要な説明の再掲を認める。</li>
+<li>全表示は同じCanonicalから生成する。表示だけ直して矛盾を隠さない。</li>
+<li>接続関係と変更影響予測は別。設計意図と説明のためのMental Modelも別。</li>
+<li>完成見本の画素単位の再現は目標にしない。</li>
+</ul>
+<h2 id="section-4">現状と未取得物</h2>
+<p>取得済み：21ターンの会話、最終Instructions全文、旧Pattern C添付HTML。
+未取得：Pattern C Multi-View V3とsessionlog_mentalmodel_builderの生成HTML本体。
+今回保存した仕様は再構成であり、失われたHTML原本の復元完了を意味しない。
+旧HTML中のテスト案・架空statsコードを実リポジトリのテスト結果と扱わない。</p>
+<h2 id="section-5">次の作業と完了条件</h2>
+<p>保存先リポジトリを特定 → 既存規則と変更確認 → 作業ブランチ → 配置 → diff確認 → commit → push。
+今回のタスク開始フォルダはGit管理外で、登録済みプロジェクトもなかったため、まずこのコンテキスト一式を作成した。
+リポジトリ内への保存・commit・pushの完了は実際のGit結果で別途確認する。</p>
+<p>将来HTMLを生成する際はTASK.mdで対象を指定し、生成仕様の検査に加えて表示・キーボード操作・印刷を確認する。</p>
+</article><footer><a href="../../docs/design-handoff.md">Markdown原文</a> · 設計コンテキスト / Code Analysis Form</footer></main></body></html>

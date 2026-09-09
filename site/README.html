@@ -1,0 +1,29 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Multi-View Analysis Context | Multi-View Analysis</title><style>:root{color-scheme:light;--ink:#183332;--accent:#176d60}*{box-sizing:border-box}body{margin:0;color:var(--ink);background:#f5f7f4;font:16px/1.85 system-ui,'Yu Gothic UI',sans-serif}header{background:#183332;color:white;padding:20px max(24px,calc((100% - 1000px)/2))}header a{color:white}main{max-width:1060px;padding:40px 30px;margin:auto}article{background:white;padding:clamp(20px,4vw,56px);border:1px solid #d9e2dc;border-radius:14px}h1{line-height:1.4;font-size:clamp(28px,4vw,40px)}h2{margin-top:2.2em;font-size:24px}h3{font-size:19px}a{color:var(--accent);text-underline-offset:4px}a:focus-visible{outline:3px solid #bf8b2b;outline-offset:4px}pre{overflow:auto;padding:20px;background:#eef3ef;border-radius:8px;line-height:1.65}code{font-family:Consolas,monospace;overflow-wrap:anywhere}pre code{overflow-wrap:normal}table{display:block;overflow-x:auto;border-collapse:collapse;font-size:14px}td,th{padding:12px;min-width:130px;text-align:left;border:1px solid #d9e2dc}th{background:#eef3ef}blockquote{margin-left:0;padding-left:20px;border-left:3px solid #9ebdb0;color:#49615b}footer{margin-top:30px;font-size:13px;color:#526960}@media print{header,footer{display:none}main,article{padding:0;border:0}body{background:white}pre{white-space:pre-wrap}table{display:table;font-size:10px}td,th{min-width:0}}</style></head><body><header><a href="../index.html">← Multi-View Analysis</a></header><main><article><h1 id="multi-view-analysis-context">Multi-View Analysis Context</h1>
+<p>Pattern C Multi-View V3、sessionlog_mentalmodel_builder、Agent Builder用Instructionsの設計思想を再利用するコンテキスト一式。</p>
+<h2 id="section">読む順序</h2>
+<ol>
+<li><a href="docs/design-handoff.html">引き継ぎ</a>：目的、到達点、未取得物、次の作業</li>
+<li><a href="agents/module-analysis/design-rationale.html">設計判断</a>：変更理由と再検討しない前提</li>
+<li><a href="docs/architecture/multiview-analysis-model.html">共通モデル</a>：情報構造と整合性</li>
+<li><a href="templates/pattern-c-v3-spec.html">V3生成仕様</a></li>
+<li><a href="templates/sessionlog-spec.html">セッション生成仕様</a></li>
+</ol>
+<h2 id="section-1">実行用</h2>
+<ul>
+<li>モジュール解析：<a href="agents/module-analysis/instructions.html">Agent Builder Instructions</a> を単一プロンプトとして使用。</li>
+<li>セッション整理：<a href="agents/sessionlog/instructions.html">Session Instructions</a> を使用。</li>
+<li>対象・範囲・実行条件：<a href="TASK.html">TASK.md</a> をコピーして埋める。</li>
+</ul>
+<p>InstructionsはAgent Builderの実行可能ワークフロー定義ではなく、Instructions欄に渡すテキスト。解析対象へのアクセスや保存機能は実行環境側で用意する。</p>
+<h2 id="section-2">出典と復元範囲</h2>
+<p><a href="docs/sources/design-discussion.html">設計議論の抜粋</a> は参照会話「HTML参照例提案」の9件を収録。全21ターンを確認済み。
+最終モジュールInstructionsは会話のwriting block本文を取得して保存した。
+その他の仕様・引き継ぎ・Session Instructionsは会話から今回再構成したもの。</p>
+<p><a href="references/pattern-c-review-cognitive-original.html">旧Pattern C HTML</a> は取得できた添付原本。V3ではない。
+V3およびsessionlogの完成HTML本体は未取得であり、この一式に同名の原本があるとは扱わない。
+旧HTML内のstatsは見本であり、解析対象リポジトリの実装事実ではない。</p>
+<h2 id="git">Gitへの保存</h2>
+<p>既存リポジトリの規則と変更を確認し、専用ブランチでこの一式を配置する。
+対象ファイルだけをstageし、diffと検証結果を確認してcommit・pushする。
+mainへ直接pushしない。mergeやGitHub Pages公開はこの作業に含めない。</p>
+</article><footer><a href="../README.md">Markdown原文</a> · 設計コンテキスト / Code Analysis Form</footer></main></body></html>
