@@ -1,0 +1,930 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Session / Mental Model Builder — HTML Sample</title><style>*{box-sizing:border-box}body{margin:0;background:#f4f7f4;color:#203e38;font:16px/1.8 system-ui,'Yu Gothic UI',sans-serif}main{max-width:1100px;margin:auto;padding:30px}header{padding:25px 0}h1{font-size:clamp(28px,4vw,44px);line-height:1.3}h2{font-size:26px}h3{font-size:20px}a{color:#146d5d;text-underline-offset:4px}button,input{font:inherit}button{border:1px solid #b9cdc3;border-radius:7px;background:white;padding:10px 15px;color:#203e38;cursor:pointer}button[aria-selected=true]{background:#205e4f;color:white}a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid #c18a28;outline-offset:3px}.notice{padding:16px 20px;background:#f8efd9;border-left:4px solid #b98520}.meta{font-size:14px;color:#50655d}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 20px}.group{font-size:12px;letter-spacing:.12em;font-weight:bold}.panel{background:white;border:1px solid #d5e2db;border-radius:12px;padding:clamp(20px,4vw,40px);margin:24px 0}.contract{display:grid;grid-template-columns:1fr 1fr;gap:12px;background:#edf4ef;padding:14px;border-radius:8px;font-size:14px}.claim{border-bottom:1px solid #e3ebe5;padding:13px 0}.badge{display:inline-block;font:700 11px/1.7 system-ui;padding:3px 8px;border-radius:4px;background:#dcf0e5;color:#225945;margin-right:8px}.INFERENCE{background:#e8e8ff;color:#504486}.PROPOSAL{background:#fff0ce;color:#795613}.UNKNOWN{background:#eceeef;color:#536269}.DECISION{background:#dbeafa;color:#265b83}.refs{font-size:13px}.legend{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}details{background:white;border:1px solid #d5e2db;border-radius:8px;padding:16px 20px;margin:14px 0}summary{cursor:pointer;font-weight:600}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#edf2ef;padding:18px;border-radius:8px;font:13px/1.7 Consolas,monospace}code{font-family:Consolas,monospace}input{width:100%;padding:12px;border:1px solid #a8beb2;border-radius:6px}footer{font-size:13px;margin:25px 0;color:#50655d}[hidden]{display:none!important}.author{border-style:dashed}@media(max-width:620px){main{padding:18px}.contract{grid-template-columns:1fr}.tabs button{flex:1 1 44%;padding:8px;font-size:13px}}@media print{body{background:white}main{padding:0}.panel[hidden]{display:block!important}.claim[hidden]{display:block!important}.tabs,.group,.tools,.search,.author,nav{display:none!important}.panel{break-before:page;border:0;padding:0}.panel h2{margin-top:0}details{break-inside:avoid}pre{font-size:10px}}</style></head><body><main><header><p class="group">OUTPUT SAMPLE / SESSION</p><h1>Session / Mental Model Builder</h1><p>「空配列は0点？」という見立てから、欠測と0点を分ける判断へ。</p><div class="notice">架空の5発言を使った説明用サンプルです。実際の作業・試験・commitの記録ではありません。</div></header><details><summary>Source Scope / 調査範囲</summary><pre>{
+  &quot;files&quot;: [
+    &quot;inputs/session-log.txt&quot;
+  ],
+  &quot;repository_wide&quot;: false,
+  &quot;runtime_verified&quot;: false,
+  &quot;coverage&quot;: &quot;架空ログL01–L05。実際のコード調査やツール結果は含まない。&quot;
+}</pre></details><div class="legend"><span class="badge FACT">FACT</span><span class="badge INFERENCE">INFERENCE</span><span class="badge PROPOSAL">PROPOSAL</span><span class="badge UNKNOWN">UNKNOWN</span><span class="badge DECISION">DECISION</span></div><div class="tools"><button id="print">全ビューを印刷</button> <label><input style="width:auto" type="checkbox" id="author-toggle"> 作成者モード</label></div><div class="group">DOCUMENT</div><div class="tabs" role="tablist" aria-label="DOCUMENT"><button role="tab" id="tab-d1" aria-controls="d1" aria-selected="true" tabindex="0">D1 Session Understanding</button><button role="tab" id="tab-d2" aria-controls="d2" aria-selected="false" tabindex="-1">D2 Decision &amp; Work Record</button><button role="tab" id="tab-d3" aria-controls="d3" aria-selected="false" tabindex="-1">D3 Handoff</button></div><div class="group">QUICK VIEW</div><div class="tabs" role="tablist" aria-label="QUICK VIEW"><button role="tab" id="tab-v1" aria-controls="v1" aria-selected="false" tabindex="-1">V1 Snapshot</button><button role="tab" id="tab-v2" aria-controls="v2" aria-selected="false" tabindex="-1">V2 Mental Model</button><button role="tab" id="tab-v3" aria-controls="v3" aria-selected="false" tabindex="-1">V3 Decision Index</button><button role="tab" id="tab-v4" aria-controls="v4" aria-selected="false" tabindex="-1">V4 Timeline / Impact</button></div><section class="panel" role="tabpanel" id="d1" aria-labelledby="tab-d1" tabindex="0"><h2>D1 / Session Understanding</h2><p>目的・転機・到達した理解を残す。</p><div class="contract"><span><b>IN</b> 初期仮説・確認・理解の変化</span><span><b>OUT</b> 全発言の逐語要約</span></div><section><h3>開始時の見立て</h3><div class="claim" id="d1-F01-1"><span class="badge FACT">FACT</span><span>架空ログでは、空配列を0点として扱う案の検討から始まった。</span><div class="refs"><a href="#E0001">E0001</a></div></div></section><section><h3>決定的な確認と理解</h3><div class="claim" id="d1-F02-2"><span class="badge FACT">FACT</span><span>架空ログのinspection発言は、空配列でValueErrorが送出されると報告している。実行の証拠ではない。</span><div class="refs"><a href="#E0002">E0002</a></div></div><div class="claim" id="d1-F03-3"><span class="badge FACT">FACT</span><span>0点へ変換する案を却下し、欠測と0点を区別するため既存の拒否契約を維持すると決定した。</span><div class="refs"><a href="#E0003">E0003</a></div></div><div class="claim" id="d1-I01-4"><span class="badge INFERENCE">INFERENCE</span><span>問題の捉え方が「便利な既定値を返す」から「欠測と有効な0点を区別する」へ変化したと読める。</span><div class="refs"><a href="#record-F01">根拠 F01</a> · <a href="#record-F02">根拠 F02</a> · <a href="#record-F03">根拠 F03</a></div></div></section><section><h3>確定事項と未調査範囲</h3><div class="claim" id="d1-F05-5"><span class="badge FACT">FACT</span><span>最後の引き継ぎにはコード変更なし・試験未実施と記録され、次回の境界試験が指定された。</span><div class="refs"><a href="#E0005">E0005</a></div></div><div class="claim" id="d1-U01-6"><span class="badge UNKNOWN">UNKNOWN</span><span>この架空セッションの試験結果・patch・commit・pushは存在する証拠がなく、実施済みとは扱わない。</span><div class="refs"></div></div></section></section><section class="panel" role="tabpanel" id="d2" aria-labelledby="tab-d2" tabindex="0"><h2>D2 / Decision &amp; Work Record</h2><p>判断と実施状態を分けて保存する。</p><div class="contract"><span><b>IN</b> 採否・試行・変更物・検証</span><span><b>OUT</b> 提案を作業完了と扱うこと</span></div><section><h3>Decision Ledger</h3><div class="claim" id="d2-D01-7"><span class="badge DECISION">DECISION</span><span>採用：既存の拒否契約を維持。却下：空配列の0点変換。理由：欠測と0点を区別する。</span><div class="refs"><a href="#E0003">E0003</a></div></div><div class="claim" id="d2-D02-8"><span class="badge DECISION">DECISION</span><span>延期：呼出し側の説明文追加。延期理由はログに記載なし。</span><div class="refs"><a href="#E0004">E0004</a></div></div></section><section><h3>作業・実験・変更Artifact</h3><div class="claim" id="d2-F05-9"><span class="badge FACT">FACT</span><span>最後の引き継ぎにはコード変更なし・試験未実施と記録され、次回の境界試験が指定された。</span><div class="refs"><a href="#E0005">E0005</a></div></div></section><section><h3>検証と未完了</h3><div class="claim" id="d2-P01-10"><span class="badge PROPOSAL">PROPOSAL</span><span>空配列・0点・64件・65件で例外と平均の期待値を検証する。実行結果はまだない。</span><div class="refs"><a href="#record-F05">根拠 F05</a></div></div><div class="claim" id="d2-U01-11"><span class="badge UNKNOWN">UNKNOWN</span><span>この架空セッションの試験結果・patch・commit・pushは存在する証拠がなく、実施済みとは扱わない。</span><div class="refs"></div></div></section></section><section class="panel" role="tabpanel" id="d3" aria-labelledby="tab-d3" tabindex="0"><h2>D3 / Handoff</h2><p>次回の最初の行動を決める。</p><div class="contract"><span><b>IN</b> Current state・Open loops・完了条件</span><span><b>OUT</b> 根拠のない完了報告</span></div><section><h3>Current state</h3><div class="claim" id="d3-F03-12"><span class="badge FACT">FACT</span><span>0点へ変換する案を却下し、欠測と0点を区別するため既存の拒否契約を維持すると決定した。</span><div class="refs"><a href="#E0003">E0003</a></div></div><div class="claim" id="d3-F04-13"><span class="badge FACT">FACT</span><span>呼出し側の説明文追加案は延期された。</span><div class="refs"><a href="#E0004">E0004</a></div></div><div class="claim" id="d3-F05-14"><span class="badge FACT">FACT</span><span>最後の引き継ぎにはコード変更なし・試験未実施と記録され、次回の境界試験が指定された。</span><div class="refs"><a href="#E0005">E0005</a></div></div></section><section><h3>Do not rediscover</h3><div class="claim" id="d3-D01-15"><span class="badge DECISION">DECISION</span><span>採用：既存の拒否契約を維持。却下：空配列の0点変換。理由：欠測と0点を区別する。</span><div class="refs"><a href="#E0003">E0003</a></div></div></section><section><h3>Open loops / Next</h3><div class="claim" id="d3-P01-16"><span class="badge PROPOSAL">PROPOSAL</span><span>空配列・0点・64件・65件で例外と平均の期待値を検証する。実行結果はまだない。</span><div class="refs"><a href="#record-F05">根拠 F05</a></div></div><div class="claim" id="d3-I02-17"><span class="badge INFERENCE">INFERENCE</span><span>次回は契約変更の再議論より、既存契約の境界試験を先に行うと判断を検証しやすい。</span><div class="refs"><a href="#record-F03">根拠 F03</a> · <a href="#record-F05">根拠 F05</a></div></div><div class="claim" id="d3-U01-18"><span class="badge UNKNOWN">UNKNOWN</span><span>この架空セッションの試験結果・patch・commit・pushは存在する証拠がなく、実施済みとは扱わない。</span><div class="refs"></div></div></section><aside class="notice"><span class="badge PROPOSAL">PROPOSAL</span><b>Definition of done</b><p>指定4ケースの入力・期待値・実測結果を記録し、既存契約への一致または不一致を判定する。これは今回作成した完了条件の提案。</p></aside></section><section class="panel" role="tabpanel" id="v1" aria-labelledby="tab-v1" tabindex="0"><h2>V1 / Snapshot</h2><p>このセッションは何だった？ / 10秒</p><div class="contract"><span><b>IN</b> 目的・結論・残件</span><span><b>OUT</b> 全判断・全発言</span></div><section><h3>空入力の扱いを判断</h3><div class="claim" id="v1-F03-19"><span class="badge FACT">FACT</span><span>0点へ変換する案を却下し、欠測と0点を区別するため既存の拒否契約を維持すると決定した。</span><div class="refs"><a href="#E0003">E0003</a></div></div><div class="claim" id="v1-F05-20"><span class="badge FACT">FACT</span><span>最後の引き継ぎにはコード変更なし・試験未実施と記録され、次回の境界試験が指定された。</span><div class="refs"><a href="#E0005">E0005</a></div></div></section><p>次に読む：<a href="#v2">Concept / Mental Model</a> · <a href="#v3">Reference / Index</a></p></section><section class="panel" role="tabpanel" id="v2" aria-labelledby="tab-v2" tabindex="0"><h2>V2 / Mental Model</h2><p>見立てがどう変わったか。</p><div class="contract"><span><b>IN</b> 初期仮説・根拠・新しい捉え方</span><span><b>OUT</b> 時系列だけの羅列</span></div><section><h3>Before</h3><div class="claim" id="v2-F01-21"><span class="badge FACT">FACT</span><span>架空ログでは、空配列を0点として扱う案の検討から始まった。</span><div class="refs"><a href="#E0001">E0001</a></div></div></section><section><h3>Turning point</h3><div class="claim" id="v2-F02-22"><span class="badge FACT">FACT</span><span>架空ログのinspection発言は、空配列でValueErrorが送出されると報告している。実行の証拠ではない。</span><div class="refs"><a href="#E0002">E0002</a></div></div><div class="claim" id="v2-F03-23"><span class="badge FACT">FACT</span><span>0点へ変換する案を却下し、欠測と0点を区別するため既存の拒否契約を維持すると決定した。</span><div class="refs"><a href="#E0003">E0003</a></div></div></section><section><h3>After</h3><div class="claim" id="v2-I01-24"><span class="badge INFERENCE">INFERENCE</span><span>問題の捉え方が「便利な既定値を返す」から「欠測と有効な0点を区別する」へ変化したと読める。</span><div class="refs"><a href="#record-F01">根拠 F01</a> · <a href="#record-F02">根拠 F02</a> · <a href="#record-F03">根拠 F03</a></div></div></section></section><section class="panel" role="tabpanel" id="v3" aria-labelledby="tab-v3" tabindex="0"><h2>V3 / Decision Index</h2><p>採用・却下・延期を検索する。</p><div class="contract"><span><b>IN</b> 判断・理由・Evidence</span><span><b>OUT</b> 未採用案を現仕様に混入</span></div><label class="search">索引を検索<input type="search" placeholder="例：入力、MAX_SCORES、採用" aria-label="索引を検索"></label><section><h3>採用 / 却下</h3><div class="claim" id="v3-D01-25"><span class="badge DECISION">DECISION</span><span>採用：既存の拒否契約を維持。却下：空配列の0点変換。理由：欠測と0点を区別する。</span><div class="refs"><a href="#E0003">E0003</a></div></div></section><section><h3>延期</h3><div class="claim" id="v3-D02-26"><span class="badge DECISION">DECISION</span><span>延期：呼出し側の説明文追加。延期理由はログに記載なし。</span><div class="refs"><a href="#E0004">E0004</a></div></div></section></section><section class="panel" role="tabpanel" id="v4" aria-labelledby="tab-v4" tabindex="0"><h2>V4 / Timeline / Impact</h2><p>転機と次への影響を確認する。</p><div class="contract"><span><b>IN</b> 時系列・因果の見立て・変更物</span><span><b>OUT</b> 時系列を因果の証明と扱うこと</span></div><section><h3>09:00 → 09:05 → 09:10</h3><div class="claim" id="v4-F01-27"><span class="badge FACT">FACT</span><span>架空ログでは、空配列を0点として扱う案の検討から始まった。</span><div class="refs"><a href="#E0001">E0001</a></div></div><div class="claim" id="v4-F02-28"><span class="badge FACT">FACT</span><span>架空ログのinspection発言は、空配列でValueErrorが送出されると報告している。実行の証拠ではない。</span><div class="refs"><a href="#E0002">E0002</a></div></div><div class="claim" id="v4-F03-29"><span class="badge FACT">FACT</span><span>0点へ変換する案を却下し、欠測と0点を区別するため既存の拒否契約を維持すると決定した。</span><div class="refs"><a href="#E0003">E0003</a></div></div></section><section><h3>09:12 → 09:15</h3><div class="claim" id="v4-F04-30"><span class="badge FACT">FACT</span><span>呼出し側の説明文追加案は延期された。</span><div class="refs"><a href="#E0004">E0004</a></div></div><div class="claim" id="v4-F05-31"><span class="badge FACT">FACT</span><span>最後の引き継ぎにはコード変更なし・試験未実施と記録され、次回の境界試験が指定された。</span><div class="refs"><a href="#E0005">E0005</a></div></div></section><section><h3>次への影響</h3><div class="claim" id="v4-I02-32"><span class="badge INFERENCE">INFERENCE</span><span>次回は契約変更の再議論より、既存契約の境界試験を先に行うと判断を検証しやすい。</span><div class="refs"><a href="#record-F03">根拠 F03</a> · <a href="#record-F05">根拠 F05</a></div></div><div class="claim" id="v4-P01-33"><span class="badge PROPOSAL">PROPOSAL</span><span>空配列・0点・64件・65件で例外と平均の期待値を検証する。実行結果はまだない。</span><div class="refs"><a href="#record-F05">根拠 F05</a></div></div></section></section><h2>Evidence / 根拠へ戻る</h2><details id="E0001"><summary>E0001 · inputs/session-log.txt : L01</summary><p>user 09:00</p><p>Supports: <a href="#record-F01">F01</a></p><pre>L01 09:00 user: 空配列を0点として扱う案を検討したい。</pre></details><details id="E0002"><summary>E0002 · inputs/session-log.txt : L02</summary><p>inspection（架空） 09:05</p><p>Supports: <a href="#record-F02">F02</a></p><pre>L02 09:05 inspection: scores.pyの5〜6行は空配列でValueErrorを送出する。</pre></details><details id="E0003"><summary>E0003 · inputs/session-log.txt : L03</summary><p>decision 09:10</p><p>Supports: <a href="#record-F03">F03</a></p><pre>L03 09:10 decision: 0点への変換は却下。欠測と0点を区別するため既存の拒否契約を維持する。</pre></details><details id="E0004"><summary>E0004 · inputs/session-log.txt : L04</summary><p>proposal 09:12</p><p>Supports: <a href="#record-F04">F04</a></p><pre>L04 09:12 proposal: 呼出し側に空入力の説明文を追加する案は延期する。</pre></details><details id="E0005"><summary>E0005 · inputs/session-log.txt : L05</summary><p>handoff 09:15</p><p>Supports: <a href="#record-F05">F05</a></p><pre>L05 09:15 handoff: コード変更なし、試験未実施。次回は空配列・0点・64件・65件を試験し、例外と平均の期待値を確認する。</pre></details><details id="claim-register"><summary>Claim Register / 主張と導出元</summary><div class="claim" id="record-F01"><span class="badge FACT">FACT</span><span>架空ログでは、空配列を0点として扱う案の検討から始まった。</span><div class="refs"><a href="#E0001">E0001</a></div></div><div class="claim" id="record-F02"><span class="badge FACT">FACT</span><span>架空ログのinspection発言は、空配列でValueErrorが送出されると報告している。実行の証拠ではない。</span><div class="refs"><a href="#E0002">E0002</a></div></div><div class="claim" id="record-F03"><span class="badge FACT">FACT</span><span>0点へ変換する案を却下し、欠測と0点を区別するため既存の拒否契約を維持すると決定した。</span><div class="refs"><a href="#E0003">E0003</a></div></div><div class="claim" id="record-F04"><span class="badge FACT">FACT</span><span>呼出し側の説明文追加案は延期された。</span><div class="refs"><a href="#E0004">E0004</a></div></div><div class="claim" id="record-F05"><span class="badge FACT">FACT</span><span>最後の引き継ぎにはコード変更なし・試験未実施と記録され、次回の境界試験が指定された。</span><div class="refs"><a href="#E0005">E0005</a></div></div><div class="claim" id="record-I01"><span class="badge INFERENCE">INFERENCE</span><span>問題の捉え方が「便利な既定値を返す」から「欠測と有効な0点を区別する」へ変化したと読める。</span><div class="refs"><a href="#record-F01">根拠 F01</a> · <a href="#record-F02">根拠 F02</a> · <a href="#record-F03">根拠 F03</a></div></div><div class="claim" id="record-I02"><span class="badge INFERENCE">INFERENCE</span><span>次回は契約変更の再議論より、既存契約の境界試験を先に行うと判断を検証しやすい。</span><div class="refs"><a href="#record-F03">根拠 F03</a> · <a href="#record-F05">根拠 F05</a></div></div><div class="claim" id="record-P01"><span class="badge PROPOSAL">PROPOSAL</span><span>空配列・0点・64件・65件で例外と平均の期待値を検証する。実行結果はまだない。</span><div class="refs"><a href="#record-F05">根拠 F05</a></div></div><div class="claim" id="record-U01"><span class="badge UNKNOWN">UNKNOWN</span><span>この架空セッションの試験結果・patch・commit・pushは存在する証拠がなく、実施済みとは扱わない。</span><div class="refs"></div></div><div class="claim" id="record-D01"><span class="badge DECISION">DECISION</span><span>採用：既存の拒否契約を維持。却下：空配列の0点変換。理由：欠測と0点を区別する。</span><div class="refs"><a href="#E0003">E0003</a></div></div><div class="claim" id="record-D02"><span class="badge DECISION">DECISION</span><span>延期：呼出し側の説明文追加。延期理由はログに記載なし。</span><div class="refs"><a href="#E0004">E0004</a></div></div></details><details class="author" hidden><summary>作成者ガイドとCanonical JSON</summary><p>先にexamples/dataの共通モデルを更新し、生成スクリプトでHTMLを再生成してください。表示だけを直接変更しないでください。</p><pre>{
+  &quot;schema_version&quot;: &quot;1.0&quot;,
+  &quot;kind&quot;: &quot;session&quot;,
+  &quot;title&quot;: &quot;Session / Mental Model Builder&quot;,
+  &quot;subtitle&quot;: &quot;「空配列は0点？」という見立てから、欠測と0点を分ける判断へ。&quot;,
+  &quot;sample_notice&quot;: &quot;架空の5発言を使った説明用サンプルです。実際の作業・試験・commitの記録ではありません。&quot;,
+  &quot;session&quot;: {
+    &quot;id&quot;: &quot;DEMO-SESSION-01&quot;,
+    &quot;period&quot;: &quot;架空時刻 09:00–09:15&quot;
+  },
+  &quot;source_scope&quot;: {
+    &quot;files&quot;: [
+      &quot;inputs/session-log.txt&quot;
+    ],
+    &quot;repository_wide&quot;: false,
+    &quot;runtime_verified&quot;: false,
+    &quot;coverage&quot;: &quot;架空ログL01–L05。実際のコード調査やツール結果は含まない。&quot;
+  },
+  &quot;facts&quot;: [
+    {
+      &quot;id&quot;: &quot;F01&quot;,
+      &quot;status&quot;: &quot;FACT&quot;,
+      &quot;claim&quot;: &quot;架空ログでは、空配列を0点として扱う案の検討から始まった。&quot;,
+      &quot;evidence&quot;: [
+        &quot;E0001&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;F02&quot;,
+      &quot;status&quot;: &quot;FACT&quot;,
+      &quot;claim&quot;: &quot;架空ログのinspection発言は、空配列でValueErrorが送出されると報告している。実行の証拠ではない。&quot;,
+      &quot;evidence&quot;: [
+        &quot;E0002&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;F03&quot;,
+      &quot;status&quot;: &quot;FACT&quot;,
+      &quot;claim&quot;: &quot;0点へ変換する案を却下し、欠測と0点を区別するため既存の拒否契約を維持すると決定した。&quot;,
+      &quot;evidence&quot;: [
+        &quot;E0003&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;F04&quot;,
+      &quot;status&quot;: &quot;FACT&quot;,
+      &quot;claim&quot;: &quot;呼出し側の説明文追加案は延期された。&quot;,
+      &quot;evidence&quot;: [
+        &quot;E0004&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;F05&quot;,
+      &quot;status&quot;: &quot;FACT&quot;,
+      &quot;claim&quot;: &quot;最後の引き継ぎにはコード変更なし・試験未実施と記録され、次回の境界試験が指定された。&quot;,
+      &quot;evidence&quot;: [
+        &quot;E0005&quot;
+      ]
+    }
+  ],
+  &quot;inferences&quot;: [
+    {
+      &quot;id&quot;: &quot;I01&quot;,
+      &quot;status&quot;: &quot;INFERENCE&quot;,
+      &quot;claim&quot;: &quot;問題の捉え方が「便利な既定値を返す」から「欠測と有効な0点を区別する」へ変化したと読める。&quot;,
+      &quot;derived_from&quot;: [
+        &quot;F01&quot;,
+        &quot;F02&quot;,
+        &quot;F03&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;I02&quot;,
+      &quot;status&quot;: &quot;INFERENCE&quot;,
+      &quot;claim&quot;: &quot;次回は契約変更の再議論より、既存契約の境界試験を先に行うと判断を検証しやすい。&quot;,
+      &quot;derived_from&quot;: [
+        &quot;F03&quot;,
+        &quot;F05&quot;
+      ]
+    }
+  ],
+  &quot;proposals&quot;: [
+    {
+      &quot;id&quot;: &quot;P01&quot;,
+      &quot;status&quot;: &quot;PROPOSAL&quot;,
+      &quot;claim&quot;: &quot;空配列・0点・64件・65件で例外と平均の期待値を検証する。実行結果はまだない。&quot;,
+      &quot;derived_from&quot;: [
+        &quot;F05&quot;
+      ]
+    }
+  ],
+  &quot;unknowns&quot;: [
+    {
+      &quot;id&quot;: &quot;U01&quot;,
+      &quot;status&quot;: &quot;UNKNOWN&quot;,
+      &quot;claim&quot;: &quot;この架空セッションの試験結果・patch・commit・pushは存在する証拠がなく、実施済みとは扱わない。&quot;,
+      &quot;derived_from&quot;: []
+    }
+  ],
+  &quot;decisions&quot;: [
+    {
+      &quot;id&quot;: &quot;D01&quot;,
+      &quot;status&quot;: &quot;DECISION&quot;,
+      &quot;claim&quot;: &quot;採用：既存の拒否契約を維持。却下：空配列の0点変換。理由：欠測と0点を区別する。&quot;,
+      &quot;evidence&quot;: [
+        &quot;E0003&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;D02&quot;,
+      &quot;status&quot;: &quot;DECISION&quot;,
+      &quot;claim&quot;: &quot;延期：呼出し側の説明文追加。延期理由はログに記載なし。&quot;,
+      &quot;evidence&quot;: [
+        &quot;E0004&quot;
+      ]
+    }
+  ],
+  &quot;events&quot;: [
+    {
+      &quot;time&quot;: &quot;09:00&quot;,
+      &quot;refs&quot;: [
+        &quot;F01&quot;
+      ]
+    },
+    {
+      &quot;time&quot;: &quot;09:05&quot;,
+      &quot;refs&quot;: [
+        &quot;F02&quot;
+      ]
+    },
+    {
+      &quot;time&quot;: &quot;09:10&quot;,
+      &quot;refs&quot;: [
+        &quot;F03&quot;
+      ]
+    },
+    {
+      &quot;time&quot;: &quot;09:12&quot;,
+      &quot;refs&quot;: [
+        &quot;F04&quot;
+      ]
+    },
+    {
+      &quot;time&quot;: &quot;09:15&quot;,
+      &quot;refs&quot;: [
+        &quot;F05&quot;
+      ]
+    }
+  ],
+  &quot;artifacts&quot;: [
+    {
+      &quot;id&quot;: &quot;A01&quot;,
+      &quot;path&quot;: &quot;scores.py（架空ログ内の対象）&quot;,
+      &quot;status&quot;: &quot;変更なしと報告&quot;,
+      &quot;evidence&quot;: [
+        &quot;E0005&quot;
+      ]
+    }
+  ],
+  &quot;relations&quot;: [
+    {
+      &quot;from&quot;: &quot;D01&quot;,
+      &quot;to&quot;: &quot;A01&quot;,
+      &quot;kind&quot;: &quot;既存契約維持&quot;,
+      &quot;status&quot;: &quot;FACT&quot;,
+      &quot;evidence&quot;: [
+        &quot;E0003&quot;,
+        &quot;E0005&quot;
+      ]
+    }
+  ],
+  &quot;open_loops&quot;: [
+    {
+      &quot;id&quot;: &quot;O01&quot;,
+      &quot;claim_refs&quot;: [
+        &quot;P01&quot;,
+        &quot;U01&quot;
+      ]
+    }
+  ],
+  &quot;handoff&quot;: {
+    &quot;current_state&quot;: [
+      &quot;F03&quot;,
+      &quot;F04&quot;,
+      &quot;F05&quot;
+    ],
+    &quot;do_not_rediscover&quot;: [
+      &quot;D01&quot;
+    ],
+    &quot;next_actions&quot;: [
+      &quot;P01&quot;
+    ],
+    &quot;definition_of_done&quot;: &quot;指定4ケースの入力・期待値・実測結果を記録し、既存契約への一致または不一致を判定する。これは今回作成した完了条件の提案。&quot;
+  },
+  &quot;evidence&quot;: [
+    {
+      &quot;id&quot;: &quot;E0001&quot;,
+      &quot;file&quot;: &quot;inputs/session-log.txt&quot;,
+      &quot;location&quot;: &quot;L01&quot;,
+      &quot;timestamp&quot;: &quot;09:00&quot;,
+      &quot;speaker_tool&quot;: &quot;user&quot;,
+      &quot;source_fragment&quot;: &quot;L01 09:00 user: 空配列を0点として扱う案を検討したい。&quot;,
+      &quot;supports&quot;: [
+        &quot;F01&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;E0002&quot;,
+      &quot;file&quot;: &quot;inputs/session-log.txt&quot;,
+      &quot;location&quot;: &quot;L02&quot;,
+      &quot;timestamp&quot;: &quot;09:05&quot;,
+      &quot;speaker_tool&quot;: &quot;inspection（架空）&quot;,
+      &quot;source_fragment&quot;: &quot;L02 09:05 inspection: scores.pyの5〜6行は空配列でValueErrorを送出する。&quot;,
+      &quot;supports&quot;: [
+        &quot;F02&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;E0003&quot;,
+      &quot;file&quot;: &quot;inputs/session-log.txt&quot;,
+      &quot;location&quot;: &quot;L03&quot;,
+      &quot;timestamp&quot;: &quot;09:10&quot;,
+      &quot;speaker_tool&quot;: &quot;decision&quot;,
+      &quot;source_fragment&quot;: &quot;L03 09:10 decision: 0点への変換は却下。欠測と0点を区別するため既存の拒否契約を維持する。&quot;,
+      &quot;supports&quot;: [
+        &quot;F03&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;E0004&quot;,
+      &quot;file&quot;: &quot;inputs/session-log.txt&quot;,
+      &quot;location&quot;: &quot;L04&quot;,
+      &quot;timestamp&quot;: &quot;09:12&quot;,
+      &quot;speaker_tool&quot;: &quot;proposal&quot;,
+      &quot;source_fragment&quot;: &quot;L04 09:12 proposal: 呼出し側に空入力の説明文を追加する案は延期する。&quot;,
+      &quot;supports&quot;: [
+        &quot;F04&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;E0005&quot;,
+      &quot;file&quot;: &quot;inputs/session-log.txt&quot;,
+      &quot;location&quot;: &quot;L05&quot;,
+      &quot;timestamp&quot;: &quot;09:15&quot;,
+      &quot;speaker_tool&quot;: &quot;handoff&quot;,
+      &quot;source_fragment&quot;: &quot;L05 09:15 handoff: コード変更なし、試験未実施。次回は空配列・0点・64件・65件を試験し、例外と平均の期待値を確認する。&quot;,
+      &quot;supports&quot;: [
+        &quot;F05&quot;
+      ]
+    }
+  ],
+  &quot;view_contracts&quot;: [
+    {
+      &quot;id&quot;: &quot;d1&quot;,
+      &quot;name&quot;: &quot;Session Understanding&quot;,
+      &quot;purpose&quot;: &quot;目的・転機・到達した理解を残す。&quot;,
+      &quot;in&quot;: &quot;初期仮説・確認・理解の変化&quot;,
+      &quot;out&quot;: &quot;全発言の逐語要約&quot;,
+      &quot;sections&quot;: [
+        {
+          &quot;title&quot;: &quot;開始時の見立て&quot;,
+          &quot;refs&quot;: [
+            &quot;F01&quot;
+          ],
+          &quot;detail&quot;: false
+        },
+        {
+          &quot;title&quot;: &quot;決定的な確認と理解&quot;,
+          &quot;refs&quot;: [
+            &quot;F02&quot;,
+            &quot;F03&quot;,
+            &quot;I01&quot;
+          ],
+          &quot;detail&quot;: false
+        },
+        {
+          &quot;title&quot;: &quot;確定事項と未調査範囲&quot;,
+          &quot;refs&quot;: [
+            &quot;F05&quot;,
+            &quot;U01&quot;
+          ],
+          &quot;detail&quot;: false
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;d2&quot;,
+      &quot;name&quot;: &quot;Decision &amp; Work Record&quot;,
+      &quot;purpose&quot;: &quot;判断と実施状態を分けて保存する。&quot;,
+      &quot;in&quot;: &quot;採否・試行・変更物・検証&quot;,
+      &quot;out&quot;: &quot;提案を作業完了と扱うこと&quot;,
+      &quot;sections&quot;: [
+        {
+          &quot;title&quot;: &quot;Decision Ledger&quot;,
+          &quot;refs&quot;: [
+            &quot;D01&quot;,
+            &quot;D02&quot;
+          ],
+          &quot;detail&quot;: false
+        },
+        {
+          &quot;title&quot;: &quot;作業・実験・変更Artifact&quot;,
+          &quot;refs&quot;: [
+            &quot;F05&quot;
+          ],
+          &quot;detail&quot;: false
+        },
+        {
+          &quot;title&quot;: &quot;検証と未完了&quot;,
+          &quot;refs&quot;: [
+            &quot;P01&quot;,
+            &quot;U01&quot;
+          ],
+          &quot;detail&quot;: false
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;d3&quot;,
+      &quot;name&quot;: &quot;Handoff&quot;,
+      &quot;purpose&quot;: &quot;次回の最初の行動を決める。&quot;,
+      &quot;in&quot;: &quot;Current state・Open loops・完了条件&quot;,
+      &quot;out&quot;: &quot;根拠のない完了報告&quot;,
+      &quot;sections&quot;: [
+        {
+          &quot;title&quot;: &quot;Current state&quot;,
+          &quot;refs&quot;: [
+            &quot;F03&quot;,
+            &quot;F04&quot;,
+            &quot;F05&quot;
+          ],
+          &quot;detail&quot;: false
+        },
+        {
+          &quot;title&quot;: &quot;Do not rediscover&quot;,
+          &quot;refs&quot;: [
+            &quot;D01&quot;
+          ],
+          &quot;detail&quot;: false
+        },
+        {
+          &quot;title&quot;: &quot;Open loops / Next&quot;,
+          &quot;refs&quot;: [
+            &quot;P01&quot;,
+            &quot;I02&quot;,
+            &quot;U01&quot;
+          ],
+          &quot;detail&quot;: false
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;v1&quot;,
+      &quot;name&quot;: &quot;Snapshot&quot;,
+      &quot;purpose&quot;: &quot;このセッションは何だった？ / 10秒&quot;,
+      &quot;in&quot;: &quot;目的・結論・残件&quot;,
+      &quot;out&quot;: &quot;全判断・全発言&quot;,
+      &quot;sections&quot;: [
+        {
+          &quot;title&quot;: &quot;空入力の扱いを判断&quot;,
+          &quot;refs&quot;: [
+            &quot;F03&quot;,
+            &quot;F05&quot;
+          ],
+          &quot;detail&quot;: false
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;v2&quot;,
+      &quot;name&quot;: &quot;Mental Model&quot;,
+      &quot;purpose&quot;: &quot;見立てがどう変わったか。&quot;,
+      &quot;in&quot;: &quot;初期仮説・根拠・新しい捉え方&quot;,
+      &quot;out&quot;: &quot;時系列だけの羅列&quot;,
+      &quot;sections&quot;: [
+        {
+          &quot;title&quot;: &quot;Before&quot;,
+          &quot;refs&quot;: [
+            &quot;F01&quot;
+          ],
+          &quot;detail&quot;: false
+        },
+        {
+          &quot;title&quot;: &quot;Turning point&quot;,
+          &quot;refs&quot;: [
+            &quot;F02&quot;,
+            &quot;F03&quot;
+          ],
+          &quot;detail&quot;: false
+        },
+        {
+          &quot;title&quot;: &quot;After&quot;,
+          &quot;refs&quot;: [
+            &quot;I01&quot;
+          ],
+          &quot;detail&quot;: false
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;v3&quot;,
+      &quot;name&quot;: &quot;Decision Index&quot;,
+      &quot;purpose&quot;: &quot;採用・却下・延期を検索する。&quot;,
+      &quot;in&quot;: &quot;判断・理由・Evidence&quot;,
+      &quot;out&quot;: &quot;未採用案を現仕様に混入&quot;,
+      &quot;sections&quot;: [
+        {
+          &quot;title&quot;: &quot;採用 / 却下&quot;,
+          &quot;refs&quot;: [
+            &quot;D01&quot;
+          ],
+          &quot;detail&quot;: false
+        },
+        {
+          &quot;title&quot;: &quot;延期&quot;,
+          &quot;refs&quot;: [
+            &quot;D02&quot;
+          ],
+          &quot;detail&quot;: false
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;v4&quot;,
+      &quot;name&quot;: &quot;Timeline / Impact&quot;,
+      &quot;purpose&quot;: &quot;転機と次への影響を確認する。&quot;,
+      &quot;in&quot;: &quot;時系列・因果の見立て・変更物&quot;,
+      &quot;out&quot;: &quot;時系列を因果の証明と扱うこと&quot;,
+      &quot;sections&quot;: [
+        {
+          &quot;title&quot;: &quot;09:00 → 09:05 → 09:10&quot;,
+          &quot;refs&quot;: [
+            &quot;F01&quot;,
+            &quot;F02&quot;,
+            &quot;F03&quot;
+          ],
+          &quot;detail&quot;: false
+        },
+        {
+          &quot;title&quot;: &quot;09:12 → 09:15&quot;,
+          &quot;refs&quot;: [
+            &quot;F04&quot;,
+            &quot;F05&quot;
+          ],
+          &quot;detail&quot;: false
+        },
+        {
+          &quot;title&quot;: &quot;次への影響&quot;,
+          &quot;refs&quot;: [
+            &quot;I02&quot;,
+            &quot;P01&quot;
+          ],
+          &quot;detail&quot;: false
+        }
+      ]
+    }
+  ]
+}</pre></details><footer>新規生成サンプル / 単一HTML・外部読込なし / 解析対象の実行試験は未実施</footer></main><script type="application/json" id="canonical-analysis">{
+  "schema_version": "1.0",
+  "kind": "session",
+  "title": "Session / Mental Model Builder",
+  "subtitle": "「空配列は0点？」という見立てから、欠測と0点を分ける判断へ。",
+  "sample_notice": "架空の5発言を使った説明用サンプルです。実際の作業・試験・commitの記録ではありません。",
+  "session": {
+    "id": "DEMO-SESSION-01",
+    "period": "架空時刻 09:00–09:15"
+  },
+  "source_scope": {
+    "files": [
+      "inputs/session-log.txt"
+    ],
+    "repository_wide": false,
+    "runtime_verified": false,
+    "coverage": "架空ログL01–L05。実際のコード調査やツール結果は含まない。"
+  },
+  "facts": [
+    {
+      "id": "F01",
+      "status": "FACT",
+      "claim": "架空ログでは、空配列を0点として扱う案の検討から始まった。",
+      "evidence": [
+        "E0001"
+      ]
+    },
+    {
+      "id": "F02",
+      "status": "FACT",
+      "claim": "架空ログのinspection発言は、空配列でValueErrorが送出されると報告している。実行の証拠ではない。",
+      "evidence": [
+        "E0002"
+      ]
+    },
+    {
+      "id": "F03",
+      "status": "FACT",
+      "claim": "0点へ変換する案を却下し、欠測と0点を区別するため既存の拒否契約を維持すると決定した。",
+      "evidence": [
+        "E0003"
+      ]
+    },
+    {
+      "id": "F04",
+      "status": "FACT",
+      "claim": "呼出し側の説明文追加案は延期された。",
+      "evidence": [
+        "E0004"
+      ]
+    },
+    {
+      "id": "F05",
+      "status": "FACT",
+      "claim": "最後の引き継ぎにはコード変更なし・試験未実施と記録され、次回の境界試験が指定された。",
+      "evidence": [
+        "E0005"
+      ]
+    }
+  ],
+  "inferences": [
+    {
+      "id": "I01",
+      "status": "INFERENCE",
+      "claim": "問題の捉え方が「便利な既定値を返す」から「欠測と有効な0点を区別する」へ変化したと読める。",
+      "derived_from": [
+        "F01",
+        "F02",
+        "F03"
+      ]
+    },
+    {
+      "id": "I02",
+      "status": "INFERENCE",
+      "claim": "次回は契約変更の再議論より、既存契約の境界試験を先に行うと判断を検証しやすい。",
+      "derived_from": [
+        "F03",
+        "F05"
+      ]
+    }
+  ],
+  "proposals": [
+    {
+      "id": "P01",
+      "status": "PROPOSAL",
+      "claim": "空配列・0点・64件・65件で例外と平均の期待値を検証する。実行結果はまだない。",
+      "derived_from": [
+        "F05"
+      ]
+    }
+  ],
+  "unknowns": [
+    {
+      "id": "U01",
+      "status": "UNKNOWN",
+      "claim": "この架空セッションの試験結果・patch・commit・pushは存在する証拠がなく、実施済みとは扱わない。",
+      "derived_from": []
+    }
+  ],
+  "decisions": [
+    {
+      "id": "D01",
+      "status": "DECISION",
+      "claim": "採用：既存の拒否契約を維持。却下：空配列の0点変換。理由：欠測と0点を区別する。",
+      "evidence": [
+        "E0003"
+      ]
+    },
+    {
+      "id": "D02",
+      "status": "DECISION",
+      "claim": "延期：呼出し側の説明文追加。延期理由はログに記載なし。",
+      "evidence": [
+        "E0004"
+      ]
+    }
+  ],
+  "events": [
+    {
+      "time": "09:00",
+      "refs": [
+        "F01"
+      ]
+    },
+    {
+      "time": "09:05",
+      "refs": [
+        "F02"
+      ]
+    },
+    {
+      "time": "09:10",
+      "refs": [
+        "F03"
+      ]
+    },
+    {
+      "time": "09:12",
+      "refs": [
+        "F04"
+      ]
+    },
+    {
+      "time": "09:15",
+      "refs": [
+        "F05"
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "A01",
+      "path": "scores.py（架空ログ内の対象）",
+      "status": "変更なしと報告",
+      "evidence": [
+        "E0005"
+      ]
+    }
+  ],
+  "relations": [
+    {
+      "from": "D01",
+      "to": "A01",
+      "kind": "既存契約維持",
+      "status": "FACT",
+      "evidence": [
+        "E0003",
+        "E0005"
+      ]
+    }
+  ],
+  "open_loops": [
+    {
+      "id": "O01",
+      "claim_refs": [
+        "P01",
+        "U01"
+      ]
+    }
+  ],
+  "handoff": {
+    "current_state": [
+      "F03",
+      "F04",
+      "F05"
+    ],
+    "do_not_rediscover": [
+      "D01"
+    ],
+    "next_actions": [
+      "P01"
+    ],
+    "definition_of_done": "指定4ケースの入力・期待値・実測結果を記録し、既存契約への一致または不一致を判定する。これは今回作成した完了条件の提案。"
+  },
+  "evidence": [
+    {
+      "id": "E0001",
+      "file": "inputs/session-log.txt",
+      "location": "L01",
+      "timestamp": "09:00",
+      "speaker_tool": "user",
+      "source_fragment": "L01 09:00 user: 空配列を0点として扱う案を検討したい。",
+      "supports": [
+        "F01"
+      ]
+    },
+    {
+      "id": "E0002",
+      "file": "inputs/session-log.txt",
+      "location": "L02",
+      "timestamp": "09:05",
+      "speaker_tool": "inspection（架空）",
+      "source_fragment": "L02 09:05 inspection: scores.pyの5〜6行は空配列でValueErrorを送出する。",
+      "supports": [
+        "F02"
+      ]
+    },
+    {
+      "id": "E0003",
+      "file": "inputs/session-log.txt",
+      "location": "L03",
+      "timestamp": "09:10",
+      "speaker_tool": "decision",
+      "source_fragment": "L03 09:10 decision: 0点への変換は却下。欠測と0点を区別するため既存の拒否契約を維持する。",
+      "supports": [
+        "F03"
+      ]
+    },
+    {
+      "id": "E0004",
+      "file": "inputs/session-log.txt",
+      "location": "L04",
+      "timestamp": "09:12",
+      "speaker_tool": "proposal",
+      "source_fragment": "L04 09:12 proposal: 呼出し側に空入力の説明文を追加する案は延期する。",
+      "supports": [
+        "F04"
+      ]
+    },
+    {
+      "id": "E0005",
+      "file": "inputs/session-log.txt",
+      "location": "L05",
+      "timestamp": "09:15",
+      "speaker_tool": "handoff",
+      "source_fragment": "L05 09:15 handoff: コード変更なし、試験未実施。次回は空配列・0点・64件・65件を試験し、例外と平均の期待値を確認する。",
+      "supports": [
+        "F05"
+      ]
+    }
+  ],
+  "view_contracts": [
+    {
+      "id": "d1",
+      "name": "Session Understanding",
+      "purpose": "目的・転機・到達した理解を残す。",
+      "in": "初期仮説・確認・理解の変化",
+      "out": "全発言の逐語要約",
+      "sections": [
+        {
+          "title": "開始時の見立て",
+          "refs": [
+            "F01"
+          ],
+          "detail": false
+        },
+        {
+          "title": "決定的な確認と理解",
+          "refs": [
+            "F02",
+            "F03",
+            "I01"
+          ],
+          "detail": false
+        },
+        {
+          "title": "確定事項と未調査範囲",
+          "refs": [
+            "F05",
+            "U01"
+          ],
+          "detail": false
+        }
+      ]
+    },
+    {
+      "id": "d2",
+      "name": "Decision & Work Record",
+      "purpose": "判断と実施状態を分けて保存する。",
+      "in": "採否・試行・変更物・検証",
+      "out": "提案を作業完了と扱うこと",
+      "sections": [
+        {
+          "title": "Decision Ledger",
+          "refs": [
+            "D01",
+            "D02"
+          ],
+          "detail": false
+        },
+        {
+          "title": "作業・実験・変更Artifact",
+          "refs": [
+            "F05"
+          ],
+          "detail": false
+        },
+        {
+          "title": "検証と未完了",
+          "refs": [
+            "P01",
+            "U01"
+          ],
+          "detail": false
+        }
+      ]
+    },
+    {
+      "id": "d3",
+      "name": "Handoff",
+      "purpose": "次回の最初の行動を決める。",
+      "in": "Current state・Open loops・完了条件",
+      "out": "根拠のない完了報告",
+      "sections": [
+        {
+          "title": "Current state",
+          "refs": [
+            "F03",
+            "F04",
+            "F05"
+          ],
+          "detail": false
+        },
+        {
+          "title": "Do not rediscover",
+          "refs": [
+            "D01"
+          ],
+          "detail": false
+        },
+        {
+          "title": "Open loops / Next",
+          "refs": [
+            "P01",
+            "I02",
+            "U01"
+          ],
+          "detail": false
+        }
+      ]
+    },
+    {
+      "id": "v1",
+      "name": "Snapshot",
+      "purpose": "このセッションは何だった？ / 10秒",
+      "in": "目的・結論・残件",
+      "out": "全判断・全発言",
+      "sections": [
+        {
+          "title": "空入力の扱いを判断",
+          "refs": [
+            "F03",
+            "F05"
+          ],
+          "detail": false
+        }
+      ]
+    },
+    {
+      "id": "v2",
+      "name": "Mental Model",
+      "purpose": "見立てがどう変わったか。",
+      "in": "初期仮説・根拠・新しい捉え方",
+      "out": "時系列だけの羅列",
+      "sections": [
+        {
+          "title": "Before",
+          "refs": [
+            "F01"
+          ],
+          "detail": false
+        },
+        {
+          "title": "Turning point",
+          "refs": [
+            "F02",
+            "F03"
+          ],
+          "detail": false
+        },
+        {
+          "title": "After",
+          "refs": [
+            "I01"
+          ],
+          "detail": false
+        }
+      ]
+    },
+    {
+      "id": "v3",
+      "name": "Decision Index",
+      "purpose": "採用・却下・延期を検索する。",
+      "in": "判断・理由・Evidence",
+      "out": "未採用案を現仕様に混入",
+      "sections": [
+        {
+          "title": "採用 / 却下",
+          "refs": [
+            "D01"
+          ],
+          "detail": false
+        },
+        {
+          "title": "延期",
+          "refs": [
+            "D02"
+          ],
+          "detail": false
+        }
+      ]
+    },
+    {
+      "id": "v4",
+      "name": "Timeline / Impact",
+      "purpose": "転機と次への影響を確認する。",
+      "in": "時系列・因果の見立て・変更物",
+      "out": "時系列を因果の証明と扱うこと",
+      "sections": [
+        {
+          "title": "09:00 → 09:05 → 09:10",
+          "refs": [
+            "F01",
+            "F02",
+            "F03"
+          ],
+          "detail": false
+        },
+        {
+          "title": "09:12 → 09:15",
+          "refs": [
+            "F04",
+            "F05"
+          ],
+          "detail": false
+        },
+        {
+          "title": "次への影響",
+          "refs": [
+            "I02",
+            "P01"
+          ],
+          "detail": false
+        }
+      ]
+    }
+  ]
+}</script><script>const tabs=[...document.querySelectorAll('[role=tab]')];
+function activate(id,focus=false){tabs.forEach(t=>{const active=t.getAttribute('aria-controls')===id;t.setAttribute('aria-selected',active);t.tabIndex=active?0:-1;document.getElementById(t.getAttribute('aria-controls')).hidden=!active;if(active&&focus)t.focus()});document.querySelectorAll('[role=tablist]').forEach(g=>{if(!g.querySelector('[aria-selected=true]'))g.querySelector('[role=tab]').tabIndex=0})}
+tabs.forEach(t=>{t.addEventListener('click',()=>activate(t.getAttribute('aria-controls')));t.addEventListener('keydown',e=>{const group=[...t.parentElement.querySelectorAll('[role=tab]')];let i=group.indexOf(t);if(e.key==='ArrowRight')i=(i+1)%group.length;else if(e.key==='ArrowLeft')i=(i+group.length-1)%group.length;else if(e.key==='Home')i=0;else if(e.key==='End')i=group.length-1;else return;e.preventDefault();activate(group[i].getAttribute('aria-controls'),true)})});
+function reveal(){const id=decodeURIComponent(location.hash.slice(1));const target=document.getElementById(id);if(!target)return;const panel=target.closest('[role=tabpanel]');if(panel)activate(panel.id);let el=target;while(el){if(el.tagName==='DETAILS')el.open=true;el=el.parentElement}target.scrollIntoView()}
+window.addEventListener('hashchange',reveal);document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',()=>setTimeout(reveal,0)));
+document.getElementById('author-toggle').addEventListener('change',e=>document.querySelectorAll('.author').forEach(el=>el.hidden=!e.target.checked));
+document.querySelectorAll('input[type=search]').forEach(input=>input.addEventListener('input',()=>input.closest('.panel').querySelectorAll('.claim').forEach(c=>c.hidden=!c.textContent.toLowerCase().includes(input.value.toLowerCase()))));
+let opened=[];window.addEventListener('beforeprint',()=>{opened=[...document.querySelectorAll('details')].map(d=>[d,d.open]);opened.forEach(([d])=>d.open=true)});window.addEventListener('afterprint',()=>opened.forEach(([d,value])=>d.open=value));
+document.getElementById('print').addEventListener('click',()=>window.print());activate('d1');reveal();</script></body></html>

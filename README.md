@@ -10,7 +10,16 @@ Pattern C Multi-View V3、sessionlog_mentalmodel_builder、Agent Builder用Instr
 4. [V3生成仕様](templates/pattern-c-v3-spec.md)
 5. [セッション生成仕様](templates/sessionlog-spec.md)
 
-## 実行用
+## 出力HTMLサンプル
+
+- [モジュール解析サンプル](examples/scores_analysis.html)：架空の点数集計コードを解析した7ビュー。
+- [セッション整理サンプル](examples/demo_sessionlog.html)：架空ログの判断・未解決事項・Handoff。
+
+どちらも元会話のHTML原本ではなく、新規生成した完成例。コードの実行試験は未実施。
+入力はexamples/inputs、共通モデルはexamples/dataに保存。node scripts/build-examples.mjsで再生成する。
+GitHub Pages入口にも掲載。各HTMLはダウンロードして単体で閲覧できる。
+
+## Instructionsの利用
 
 - モジュール解析：[Agent Builder Instructions](agents/module-analysis/instructions.md) を単一プロンプトとして使用。
 - セッション整理：[Session Instructions](agents/sessionlog/instructions.md) を使用。

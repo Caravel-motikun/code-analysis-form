@@ -1,0 +1,6 @@
+FICTIONAL SESSION FIXTURE — not an actual execution record
+L01 09:00 user: 空配列を0点として扱う案を検討したい。
+L02 09:05 inspection: scores.pyの5〜6行は空配列でValueErrorを送出する。
+L03 09:10 decision: 0点への変換は却下。欠測と0点を区別するため既存の拒否契約を維持する。
+L04 09:12 proposal: 呼出し側に空入力の説明文を追加する案は延期する。
+L05 09:15 handoff: コード変更なし、試験未実施。次回は空配列・0点・64件・65件を試験し、例外と平均の期待値を確認する。

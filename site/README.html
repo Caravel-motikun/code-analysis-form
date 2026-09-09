@@ -8,14 +8,22 @@
 <li><a href="templates/pattern-c-v3-spec.html">V3生成仕様</a></li>
 <li><a href="templates/sessionlog-spec.html">セッション生成仕様</a></li>
 </ol>
-<h2 id="section-1">実行用</h2>
+<h2 id="html">出力HTMLサンプル</h2>
+<ul>
+<li><a href="examples/scores_analysis.html">モジュール解析サンプル</a>：架空の点数集計コードを解析した7ビュー。</li>
+<li><a href="examples/demo_sessionlog.html">セッション整理サンプル</a>：架空ログの判断・未解決事項・Handoff。</li>
+</ul>
+<p>どちらも元会話のHTML原本ではなく、新規生成した完成例。コードの実行試験は未実施。
+入力はexamples/inputs、共通モデルはexamples/dataに保存。node scripts/build-examples.mjsで再生成する。
+GitHub Pages入口にも掲載。各HTMLはダウンロードして単体で閲覧できる。</p>
+<h2 id="instructions">Instructionsの利用</h2>
 <ul>
 <li>モジュール解析：<a href="agents/module-analysis/instructions.html">Agent Builder Instructions</a> を単一プロンプトとして使用。</li>
 <li>セッション整理：<a href="agents/sessionlog/instructions.html">Session Instructions</a> を使用。</li>
 <li>対象・範囲・実行条件：<a href="TASK.html">TASK.md</a> をコピーして埋める。</li>
 </ul>
 <p>InstructionsはAgent Builderの実行可能ワークフロー定義ではなく、Instructions欄に渡すテキスト。解析対象へのアクセスや保存機能は実行環境側で用意する。</p>
-<h2 id="section-2">出典と復元範囲</h2>
+<h2 id="section-1">出典と復元範囲</h2>
 <p><a href="docs/sources/design-discussion.html">設計議論の抜粋</a> は参照会話「HTML参照例提案」の9件を収録。全21ターンを確認済み。
 最終モジュールInstructionsは会話のwriting block本文を取得して保存した。
 その他の仕様・引き継ぎ・Session Instructionsは会話から今回再構成したもの。</p>

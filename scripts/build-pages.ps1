@@ -21,4 +21,8 @@ foreach ($relative in $documents) {
 }
 New-Item -ItemType Directory -Path (Join-Path $destination 'references') -Force | Out-Null
 Copy-Item (Join-Path $repoRoot 'references/*.html') (Join-Path $destination 'references')
+if (Test-Path (Join-Path $repoRoot 'examples')) {
+ New-Item -ItemType Directory -Path (Join-Path $destination 'examples') -Force | Out-Null
+ Copy-Item (Join-Path $repoRoot 'examples/*.html') (Join-Path $destination 'examples')
+}
 Write-Output "Generated $($documents.Count) document pages and reference HTML."

@@ -1,0 +1,525 @@
+{
+  "schema_version": "1.0",
+  "kind": "module",
+  "title": "Scores / Module Analysis",
+  "subtitle": "入力を検証してから集計結果を返す、小さなPythonモジュール。",
+  "sample_notice": "新規作成した架空コードの解析サンプルです。元会話のV3原本ではありません。静的読解のみ・コード実行未確認。",
+  "source_scope": {
+    "files": [
+      "inputs/scores.py"
+    ],
+    "version": "このHTML内に根拠コード全文を固定",
+    "repository_wide": false,
+    "runtime_verified": false,
+    "callers": "未調査",
+    "callees": "Python組込み関数を静的に確認",
+    "unverified": [
+      "外部caller",
+      "実行試験",
+      "並行変更時の挙動"
+    ]
+  },
+  "subject": {
+    "id": "scores",
+    "name": "scores",
+    "type": "module"
+  },
+  "responsibilities": [
+    "入力条件の検証",
+    "件数・最小値・最大値・平均値の算出"
+  ],
+  "facts": [
+    {
+      "id": "F01",
+      "status": "FACT",
+      "claim": "summarize_scores(values: list[int]) -> dict が公開の集計入口。MAX_SCORESは64。",
+      "evidence": [
+        "E0001"
+      ]
+    },
+    {
+      "id": "F02",
+      "status": "FACT",
+      "claim": "要素数は1〜64件。空配列・65件以上はValueErrorを送出する。",
+      "evidence": [
+        "E0002"
+      ]
+    },
+    {
+      "id": "F03",
+      "status": "FACT",
+      "claim": "各要素は厳密にint型で、0〜100の範囲に限る。boolやfloatは受け付けない。",
+      "evidence": [
+        "E0003"
+      ]
+    },
+    {
+      "id": "F04",
+      "status": "FACT",
+      "claim": "成功時に新しい辞書を返し、count / min / max / meanを格納する。meanは合計を件数で割った値。",
+      "evidence": [
+        "E0004"
+      ]
+    },
+    {
+      "id": "F05",
+      "status": "FACT",
+      "claim": "この関数にはvaluesへの書込みがなく、2つの検証を通過した後にreturnの辞書を評価する。",
+      "evidence": [
+        "E0002",
+        "E0003",
+        "E0004"
+      ]
+    },
+    {
+      "id": "F06",
+      "status": "FACT",
+      "claim": "len・any・typeで検証し、min・max・sum・lenで集計する。外部import、ファイルI/O、永続状態はこのファイルにはない。",
+      "evidence": [
+        "E0001",
+        "E0002",
+        "E0003",
+        "E0004"
+      ]
+    }
+  ],
+  "inferences": [
+    {
+      "id": "I01",
+      "status": "INFERENCE",
+      "claim": "「検証 → 集計 → 新しい結果を返す」というモデルで理解できる。原子的トランザクションや並行性の保証を意味しない。",
+      "derived_from": [
+        "F02",
+        "F03",
+        "F04",
+        "F05"
+      ]
+    },
+    {
+      "id": "I02",
+      "status": "INFERENCE",
+      "claim": "入力[20, 40, 60]ならcount=3、min=20、max=60、mean=40.0になると読める。これは静的な予測で、実行結果ではない。",
+      "derived_from": [
+        "F02",
+        "F03",
+        "F04"
+      ]
+    },
+    {
+      "id": "I03",
+      "status": "INFERENCE",
+      "claim": "既存の辞書へ途中結果を書き込まないため、呼出し側は戻り値を受け取れたかで結果の取得を判断できる。",
+      "derived_from": [
+        "F04",
+        "F05"
+      ]
+    },
+    {
+      "id": "I04",
+      "status": "INFERENCE",
+      "claim": "MAX_SCORESや要素型判定を変更する場合、境界値・bool・floatの試験と、入力制限に依存するcallerを確認すべき。callerの実在・範囲は未調査。",
+      "derived_from": [
+        "F01",
+        "F02",
+        "F03"
+      ]
+    },
+    {
+      "id": "I05",
+      "status": "INFERENCE",
+      "claim": "組込み集計を複数回行うため、通常のリストに対し時間計算量はO(n)、入力以外の追加領域はO(1)と読める。計測は未実施。",
+      "derived_from": [
+        "F06"
+      ]
+    }
+  ],
+  "proposals": [
+    {
+      "id": "P01",
+      "status": "PROPOSAL",
+      "claim": "空配列、0点、100点、64件、65件、bool、floatを対象に境界試験を追加する。",
+      "derived_from": [
+        "F02",
+        "F03",
+        "F04"
+      ]
+    }
+  ],
+  "unknowns": [
+    {
+      "id": "U01",
+      "status": "UNKNOWN",
+      "claim": "実行試験、外部caller、設計者が上限64を選んだ理由は未確認。",
+      "derived_from": []
+    },
+    {
+      "id": "U02",
+      "status": "UNKNOWN",
+      "claim": "呼出し中に別処理がリストを変更する場合の保証は未確認。型注釈はlist以外を実行時に排除する検査ではない。",
+      "derived_from": []
+    }
+  ],
+  "symbols": [
+    {
+      "id": "scores-fn",
+      "name": "summarize_scores",
+      "signature": "summarize_scores(values: list[int]) -> dict",
+      "evidence": [
+        "E0001"
+      ]
+    },
+    {
+      "id": "scores-max",
+      "name": "MAX_SCORES",
+      "signature": "MAX_SCORES = 64",
+      "evidence": [
+        "E0001"
+      ]
+    }
+  ],
+  "relations": [
+    {
+      "from": "scores-fn",
+      "to": "scores-max",
+      "kind": "reads",
+      "status": "FACT",
+      "evidence": [
+        "E0002"
+      ]
+    }
+  ],
+  "flows": [
+    {
+      "steps": [
+        "件数検証",
+        "型・値域検証",
+        "集計",
+        "辞書返却"
+      ],
+      "evidence": [
+        "E0002",
+        "E0003",
+        "E0004"
+      ]
+    }
+  ],
+  "states": [
+    {
+      "description": "永続状態なし。入力から新しい出力値を生成する。",
+      "evidence": [
+        "E0004"
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "name": "ValueError",
+      "evidence": [
+        "E0002",
+        "E0003"
+      ]
+    }
+  ],
+  "contracts": [
+    {
+      "claim_refs": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05"
+      ]
+    }
+  ],
+  "resources": [],
+  "tests": [
+    {
+      "status": "未実施",
+      "proposal": "P01"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E0001",
+      "file": "inputs/scores.py",
+      "location": "1–4",
+      "symbol": "summarize_scores / MAX_SCORES",
+      "source_fragment": "\"\"\"Small fictional module used only by the HTML example.\"\"\"\nMAX_SCORES = 64\n\ndef summarize_scores(values: list[int]) -> dict:",
+      "supports": [
+        "F01",
+        "F06"
+      ]
+    },
+    {
+      "id": "E0002",
+      "file": "inputs/scores.py",
+      "location": "5–6",
+      "symbol": "summarize_scores",
+      "source_fragment": "    if not 1 <= len(values) <= MAX_SCORES:\n        raise ValueError(\"expected 1..64 scores\")",
+      "supports": [
+        "F02",
+        "F05",
+        "F06"
+      ]
+    },
+    {
+      "id": "E0003",
+      "file": "inputs/scores.py",
+      "location": "7–8",
+      "symbol": "summarize_scores",
+      "source_fragment": "    if any(type(v) is not int or not 0 <= v <= 100 for v in values):\n        raise ValueError(\"scores must be integers in 0..100\")",
+      "supports": [
+        "F03",
+        "F05",
+        "F06"
+      ]
+    },
+    {
+      "id": "E0004",
+      "file": "inputs/scores.py",
+      "location": "9–14",
+      "symbol": "summarize_scores",
+      "source_fragment": "    return {\n        \"count\": len(values),\n        \"min\": min(values),\n        \"max\": max(values),\n        \"mean\": sum(values) / len(values),\n    }",
+      "supports": [
+        "F04",
+        "F05",
+        "F06"
+      ]
+    }
+  ],
+  "view_contracts": [
+    {
+      "id": "d1",
+      "name": "Understanding",
+      "purpose": "C-01：入力が拒否される条件と、結果を使える地点を説明できる。",
+      "in": "具体例・因果・利用時の判断",
+      "out": "関数数によるセル分割",
+      "sections": [
+        {
+          "title": "何をしてくれるか",
+          "refs": [
+            "F01",
+            "F04"
+          ],
+          "detail": false
+        },
+        {
+          "title": "具体例からつかむ",
+          "refs": [
+            "I02"
+          ],
+          "detail": false
+        },
+        {
+          "title": "失敗と結果の境界",
+          "refs": [
+            "F02",
+            "F03",
+            "F05",
+            "I03"
+          ],
+          "detail": false
+        },
+        {
+          "title": "到達する理解",
+          "refs": [
+            "I01",
+            "U02"
+          ],
+          "detail": false
+        }
+      ]
+    },
+    {
+      "id": "d2",
+      "name": "External Design",
+      "purpose": "呼出し側が守る条件と、受け取る結果を整理する。",
+      "in": "公開入口・入力・戻り値・失敗時保証",
+      "out": "内部アルゴリズムの詳細",
+      "sections": [
+        {
+          "title": "EXT-01 公開契約",
+          "refs": [
+            "F01",
+            "F02",
+            "F03",
+            "F04"
+          ],
+          "detail": false
+        },
+        {
+          "title": "所有権・副作用",
+          "refs": [
+            "F05",
+            "U02"
+          ],
+          "detail": false
+        },
+        {
+          "title": "受入条件の候補",
+          "refs": [
+            "P01",
+            "U01"
+          ],
+          "detail": false
+        }
+      ]
+    },
+    {
+      "id": "d3",
+      "name": "Internal Design",
+      "purpose": "公開契約をどう実現するかを追う。",
+      "in": "構成・処理・資源・性能・内部試験",
+      "out": "根拠のない設計意図",
+      "sections": [
+        {
+          "title": "INT-01 検証から返却まで",
+          "refs": [
+            "F02",
+            "F03",
+            "F04",
+            "F06"
+          ],
+          "detail": false
+        },
+        {
+          "title": "結果確定と状態",
+          "refs": [
+            "F05",
+            "I01"
+          ],
+          "detail": false
+        },
+        {
+          "title": "性能・並行性・試験",
+          "refs": [
+            "I05",
+            "U02",
+            "P01"
+          ],
+          "detail": true
+        }
+      ]
+    },
+    {
+      "id": "v1",
+      "name": "Definition",
+      "purpose": "これは何？ / 10〜30秒",
+      "in": "一言定義・短い補足",
+      "out": "全関数・詳細エラー・アルゴリズム",
+      "sections": [
+        {
+          "title": "点数列を検証・集計する関数",
+          "refs": [
+            "F01",
+            "F04"
+          ],
+          "detail": false
+        }
+      ]
+    },
+    {
+      "id": "v2",
+      "name": "Concept",
+      "purpose": "どういうモデルで理解する？",
+      "in": "Why・抽象化・流れ・境界",
+      "out": "完全API一覧・行単位追跡",
+      "sections": [
+        {
+          "title": "What",
+          "refs": [
+            "F01",
+            "F04"
+          ],
+          "detail": false
+        },
+        {
+          "title": "Mental Model / Why",
+          "refs": [
+            "I01",
+            "I03"
+          ],
+          "detail": false
+        },
+        {
+          "title": "LifecycleとFailure",
+          "refs": [
+            "F02",
+            "F03",
+            "F05"
+          ],
+          "detail": true
+        },
+        {
+          "title": "Use caseと限界",
+          "refs": [
+            "I02",
+            "U01",
+            "U02"
+          ],
+          "detail": true
+        }
+      ]
+    },
+    {
+      "id": "v3",
+      "name": "Symbol Reference",
+      "purpose": "シンボルの正確な契約を引く。",
+      "in": "宣言・入力・戻り値・例外・定義位置",
+      "out": "長い設計思想",
+      "sections": [
+        {
+          "title": "summarize_scores",
+          "refs": [
+            "F01",
+            "F02",
+            "F03",
+            "F04",
+            "F05"
+          ],
+          "detail": false
+        },
+        {
+          "title": "MAX_SCORES / 制約",
+          "refs": [
+            "F01",
+            "U02"
+          ],
+          "detail": false
+        }
+      ]
+    },
+    {
+      "id": "v4",
+      "name": "Relation / Impact",
+      "purpose": "接続と変更時の確認先を分けて読む。",
+      "in": "reads・calls・変更影響・調査範囲",
+      "out": "未調査の全caller断定",
+      "sections": [
+        {
+          "title": "確認した関係",
+          "refs": [
+            "F01",
+            "F06"
+          ],
+          "detail": false
+        },
+        {
+          "title": "変更影響の見立て",
+          "refs": [
+            "I04"
+          ],
+          "detail": false
+        },
+        {
+          "title": "調査の境界",
+          "refs": [
+            "U01",
+            "U02"
+          ],
+          "detail": false
+        }
+      ]
+    }
+  ]
+}

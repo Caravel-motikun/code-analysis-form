@@ -1,0 +1,458 @@
+{
+  "schema_version": "1.0",
+  "kind": "session",
+  "title": "Session / Mental Model Builder",
+  "subtitle": "「空配列は0点？」という見立てから、欠測と0点を分ける判断へ。",
+  "sample_notice": "架空の5発言を使った説明用サンプルです。実際の作業・試験・commitの記録ではありません。",
+  "session": {
+    "id": "DEMO-SESSION-01",
+    "period": "架空時刻 09:00–09:15"
+  },
+  "source_scope": {
+    "files": [
+      "inputs/session-log.txt"
+    ],
+    "repository_wide": false,
+    "runtime_verified": false,
+    "coverage": "架空ログL01–L05。実際のコード調査やツール結果は含まない。"
+  },
+  "facts": [
+    {
+      "id": "F01",
+      "status": "FACT",
+      "claim": "架空ログでは、空配列を0点として扱う案の検討から始まった。",
+      "evidence": [
+        "E0001"
+      ]
+    },
+    {
+      "id": "F02",
+      "status": "FACT",
+      "claim": "架空ログのinspection発言は、空配列でValueErrorが送出されると報告している。実行の証拠ではない。",
+      "evidence": [
+        "E0002"
+      ]
+    },
+    {
+      "id": "F03",
+      "status": "FACT",
+      "claim": "0点へ変換する案を却下し、欠測と0点を区別するため既存の拒否契約を維持すると決定した。",
+      "evidence": [
+        "E0003"
+      ]
+    },
+    {
+      "id": "F04",
+      "status": "FACT",
+      "claim": "呼出し側の説明文追加案は延期された。",
+      "evidence": [
+        "E0004"
+      ]
+    },
+    {
+      "id": "F05",
+      "status": "FACT",
+      "claim": "最後の引き継ぎにはコード変更なし・試験未実施と記録され、次回の境界試験が指定された。",
+      "evidence": [
+        "E0005"
+      ]
+    }
+  ],
+  "inferences": [
+    {
+      "id": "I01",
+      "status": "INFERENCE",
+      "claim": "問題の捉え方が「便利な既定値を返す」から「欠測と有効な0点を区別する」へ変化したと読める。",
+      "derived_from": [
+        "F01",
+        "F02",
+        "F03"
+      ]
+    },
+    {
+      "id": "I02",
+      "status": "INFERENCE",
+      "claim": "次回は契約変更の再議論より、既存契約の境界試験を先に行うと判断を検証しやすい。",
+      "derived_from": [
+        "F03",
+        "F05"
+      ]
+    }
+  ],
+  "proposals": [
+    {
+      "id": "P01",
+      "status": "PROPOSAL",
+      "claim": "空配列・0点・64件・65件で例外と平均の期待値を検証する。実行結果はまだない。",
+      "derived_from": [
+        "F05"
+      ]
+    }
+  ],
+  "unknowns": [
+    {
+      "id": "U01",
+      "status": "UNKNOWN",
+      "claim": "この架空セッションの試験結果・patch・commit・pushは存在する証拠がなく、実施済みとは扱わない。",
+      "derived_from": []
+    }
+  ],
+  "decisions": [
+    {
+      "id": "D01",
+      "status": "DECISION",
+      "claim": "採用：既存の拒否契約を維持。却下：空配列の0点変換。理由：欠測と0点を区別する。",
+      "evidence": [
+        "E0003"
+      ]
+    },
+    {
+      "id": "D02",
+      "status": "DECISION",
+      "claim": "延期：呼出し側の説明文追加。延期理由はログに記載なし。",
+      "evidence": [
+        "E0004"
+      ]
+    }
+  ],
+  "events": [
+    {
+      "time": "09:00",
+      "refs": [
+        "F01"
+      ]
+    },
+    {
+      "time": "09:05",
+      "refs": [
+        "F02"
+      ]
+    },
+    {
+      "time": "09:10",
+      "refs": [
+        "F03"
+      ]
+    },
+    {
+      "time": "09:12",
+      "refs": [
+        "F04"
+      ]
+    },
+    {
+      "time": "09:15",
+      "refs": [
+        "F05"
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "A01",
+      "path": "scores.py（架空ログ内の対象）",
+      "status": "変更なしと報告",
+      "evidence": [
+        "E0005"
+      ]
+    }
+  ],
+  "relations": [
+    {
+      "from": "D01",
+      "to": "A01",
+      "kind": "既存契約維持",
+      "status": "FACT",
+      "evidence": [
+        "E0003",
+        "E0005"
+      ]
+    }
+  ],
+  "open_loops": [
+    {
+      "id": "O01",
+      "claim_refs": [
+        "P01",
+        "U01"
+      ]
+    }
+  ],
+  "handoff": {
+    "current_state": [
+      "F03",
+      "F04",
+      "F05"
+    ],
+    "do_not_rediscover": [
+      "D01"
+    ],
+    "next_actions": [
+      "P01"
+    ],
+    "definition_of_done": "指定4ケースの入力・期待値・実測結果を記録し、既存契約への一致または不一致を判定する。これは今回作成した完了条件の提案。"
+  },
+  "evidence": [
+    {
+      "id": "E0001",
+      "file": "inputs/session-log.txt",
+      "location": "L01",
+      "timestamp": "09:00",
+      "speaker_tool": "user",
+      "source_fragment": "L01 09:00 user: 空配列を0点として扱う案を検討したい。",
+      "supports": [
+        "F01"
+      ]
+    },
+    {
+      "id": "E0002",
+      "file": "inputs/session-log.txt",
+      "location": "L02",
+      "timestamp": "09:05",
+      "speaker_tool": "inspection（架空）",
+      "source_fragment": "L02 09:05 inspection: scores.pyの5〜6行は空配列でValueErrorを送出する。",
+      "supports": [
+        "F02"
+      ]
+    },
+    {
+      "id": "E0003",
+      "file": "inputs/session-log.txt",
+      "location": "L03",
+      "timestamp": "09:10",
+      "speaker_tool": "decision",
+      "source_fragment": "L03 09:10 decision: 0点への変換は却下。欠測と0点を区別するため既存の拒否契約を維持する。",
+      "supports": [
+        "F03"
+      ]
+    },
+    {
+      "id": "E0004",
+      "file": "inputs/session-log.txt",
+      "location": "L04",
+      "timestamp": "09:12",
+      "speaker_tool": "proposal",
+      "source_fragment": "L04 09:12 proposal: 呼出し側に空入力の説明文を追加する案は延期する。",
+      "supports": [
+        "F04"
+      ]
+    },
+    {
+      "id": "E0005",
+      "file": "inputs/session-log.txt",
+      "location": "L05",
+      "timestamp": "09:15",
+      "speaker_tool": "handoff",
+      "source_fragment": "L05 09:15 handoff: コード変更なし、試験未実施。次回は空配列・0点・64件・65件を試験し、例外と平均の期待値を確認する。",
+      "supports": [
+        "F05"
+      ]
+    }
+  ],
+  "view_contracts": [
+    {
+      "id": "d1",
+      "name": "Session Understanding",
+      "purpose": "目的・転機・到達した理解を残す。",
+      "in": "初期仮説・確認・理解の変化",
+      "out": "全発言の逐語要約",
+      "sections": [
+        {
+          "title": "開始時の見立て",
+          "refs": [
+            "F01"
+          ],
+          "detail": false
+        },
+        {
+          "title": "決定的な確認と理解",
+          "refs": [
+            "F02",
+            "F03",
+            "I01"
+          ],
+          "detail": false
+        },
+        {
+          "title": "確定事項と未調査範囲",
+          "refs": [
+            "F05",
+            "U01"
+          ],
+          "detail": false
+        }
+      ]
+    },
+    {
+      "id": "d2",
+      "name": "Decision & Work Record",
+      "purpose": "判断と実施状態を分けて保存する。",
+      "in": "採否・試行・変更物・検証",
+      "out": "提案を作業完了と扱うこと",
+      "sections": [
+        {
+          "title": "Decision Ledger",
+          "refs": [
+            "D01",
+            "D02"
+          ],
+          "detail": false
+        },
+        {
+          "title": "作業・実験・変更Artifact",
+          "refs": [
+            "F05"
+          ],
+          "detail": false
+        },
+        {
+          "title": "検証と未完了",
+          "refs": [
+            "P01",
+            "U01"
+          ],
+          "detail": false
+        }
+      ]
+    },
+    {
+      "id": "d3",
+      "name": "Handoff",
+      "purpose": "次回の最初の行動を決める。",
+      "in": "Current state・Open loops・完了条件",
+      "out": "根拠のない完了報告",
+      "sections": [
+        {
+          "title": "Current state",
+          "refs": [
+            "F03",
+            "F04",
+            "F05"
+          ],
+          "detail": false
+        },
+        {
+          "title": "Do not rediscover",
+          "refs": [
+            "D01"
+          ],
+          "detail": false
+        },
+        {
+          "title": "Open loops / Next",
+          "refs": [
+            "P01",
+            "I02",
+            "U01"
+          ],
+          "detail": false
+        }
+      ]
+    },
+    {
+      "id": "v1",
+      "name": "Snapshot",
+      "purpose": "このセッションは何だった？ / 10秒",
+      "in": "目的・結論・残件",
+      "out": "全判断・全発言",
+      "sections": [
+        {
+          "title": "空入力の扱いを判断",
+          "refs": [
+            "F03",
+            "F05"
+          ],
+          "detail": false
+        }
+      ]
+    },
+    {
+      "id": "v2",
+      "name": "Mental Model",
+      "purpose": "見立てがどう変わったか。",
+      "in": "初期仮説・根拠・新しい捉え方",
+      "out": "時系列だけの羅列",
+      "sections": [
+        {
+          "title": "Before",
+          "refs": [
+            "F01"
+          ],
+          "detail": false
+        },
+        {
+          "title": "Turning point",
+          "refs": [
+            "F02",
+            "F03"
+          ],
+          "detail": false
+        },
+        {
+          "title": "After",
+          "refs": [
+            "I01"
+          ],
+          "detail": false
+        }
+      ]
+    },
+    {
+      "id": "v3",
+      "name": "Decision Index",
+      "purpose": "採用・却下・延期を検索する。",
+      "in": "判断・理由・Evidence",
+      "out": "未採用案を現仕様に混入",
+      "sections": [
+        {
+          "title": "採用 / 却下",
+          "refs": [
+            "D01"
+          ],
+          "detail": false
+        },
+        {
+          "title": "延期",
+          "refs": [
+            "D02"
+          ],
+          "detail": false
+        }
+      ]
+    },
+    {
+      "id": "v4",
+      "name": "Timeline / Impact",
+      "purpose": "転機と次への影響を確認する。",
+      "in": "時系列・因果の見立て・変更物",
+      "out": "時系列を因果の証明と扱うこと",
+      "sections": [
+        {
+          "title": "09:00 → 09:05 → 09:10",
+          "refs": [
+            "F01",
+            "F02",
+            "F03"
+          ],
+          "detail": false
+        },
+        {
+          "title": "09:12 → 09:15",
+          "refs": [
+            "F04",
+            "F05"
+          ],
+          "detail": false
+        },
+        {
+          "title": "次への影響",
+          "refs": [
+            "I02",
+            "P01"
+          ],
+          "detail": false
+        }
+      ]
+    }
+  ]
+}
